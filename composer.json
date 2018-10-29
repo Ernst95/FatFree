@@ -1,0 +1,13 @@
+{
+  "name": "ernst95/fatfree",
+  "description": "F3 app",
+  "require": {
+    "bcosca/fatfree": "^3.5"
+  },
+  "authors": [
+    {
+      "name": "Ernst95",
+      "email": "test@gmail.com"
+    }
+  ]
+}
