@@ -18,11 +18,11 @@ class User extends DB\SQL\Mapper{
     
     }
 
-    public function getById($userid) {
+    public function getById($userId) {
         /*$this->load(array('userId=?', $userid));
         return $this->query;*/
 
-        $query = "SELECT * FROM user WHERE userId = '$userid'";
+        $query = "SELECT * FROM user WHERE userId = '$userId'";
 
         $result = $this->db->exec($query);
 
@@ -58,6 +58,26 @@ class User extends DB\SQL\Mapper{
 
         return $result;
     
+    }
+
+    public function create($data) {
+
+        $this->load(array('userId = ?', $data['userId']));
+
+        $this->copyFrom($data);
+
+        $this->save();
+
+    }
+
+    public function delete($data) {
+
+        $this->load(array('userId = ?', $data['userId']));
+
+        $this->copyFrom($data);
+
+        $this->save();
+
     }
 
 }
