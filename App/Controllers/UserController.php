@@ -146,6 +146,36 @@ class UserController extends Controller {
 
     }
 
+    function login($f3, $params) {
+
+        header('Content-type:application/json');
+
+        $data = json_decode($f3->get('BODY'), true);
+
+        if(empty($data['userId']) || empty($data['title'])) {
+
+            echo json_encode(array(
+                'success' => false,
+                'message' => 'Missing one or more required fields'
+            ));
+
+            return;
+
+        }
+
+        $user = new User($this->db);
+
+        $result = $user->login($data);
+
+        $success = (count($result) <= 0 ? false : true);
+
+        echo json_encode(array(
+            'success' => $success,
+            'results' => $result
+        ));
+
+    }
+
 }
 
 

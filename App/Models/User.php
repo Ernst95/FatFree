@@ -80,6 +80,17 @@ class User extends DB\SQL\Mapper{
 
     }
 
+    public function login($data) {
+
+        $this->load(array('userId = ? AND title = ?', $data['userId'], $data['title']));
+
+        // var_dump($this->cast());
+        // exit;
+
+        return $this->cast();
+
+    }
+
 }
 
 ?>
