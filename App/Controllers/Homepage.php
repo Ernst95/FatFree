@@ -6,6 +6,10 @@ class Homepage extends Controller{
         echo 'Hello world!';
     }
     
+    function error() {
+        echo 'Please log in';
+    }
+
 }
 
 ?>
