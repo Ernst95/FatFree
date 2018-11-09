@@ -7,8 +7,6 @@ class User extends DB\SQL\Mapper{
     }
 
     public function getAll() {
-        /*$this->load();
-        return $this->query;*/
 
         $query = "SELECT * FROM user";
 
@@ -19,8 +17,6 @@ class User extends DB\SQL\Mapper{
     }
 
     public function getById($userId) {
-        /*$this->load(array('userId=?', $userid));
-        return $this->query;*/
 
         $query = "SELECT * FROM user WHERE userId = '$userId'";
 
@@ -42,7 +38,7 @@ class User extends DB\SQL\Mapper{
 
     public function getByMobileNumber($mobileNumber) {
 
-        $query = "SELECT * FROM user WHERE mobileNumber '$mobileNumber'";
+        $query = "SELECT * FROM user WHERE mobileNumber = '$mobileNumber'";
 
         $result = $this->db->exec($query);
 
@@ -52,7 +48,7 @@ class User extends DB\SQL\Mapper{
 
     public function getByUserGroupId($userGroupId) {
 
-        $query = "SELECT * FROM user WHERE userGroupId '$userGroupId'";
+        $query = "SELECT * FROM user WHERE userGroupId = '$userGroupId'";
 
         $result = $this->db->exec($query);
 
@@ -77,17 +73,6 @@ class User extends DB\SQL\Mapper{
         $this->copyFrom($data);
 
         $this->save();
-
-    }
-
-    public function login($data) {
-
-        $this->load(array('userId = ? AND title = ?', $data['userId'], $data['title']));
-
-        // var_dump($this->cast());
-        // exit;
-
-        return $this->cast();
 
     }
 
