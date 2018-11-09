@@ -6,12 +6,15 @@
 
             header('Content-type:application/json');
 
+            date_default_timezone_set("Africa/Johannesburg");
+
             $data = json_decode($f3->get('BODY'), true);
 
             $user = new User($this->db);
+
             $result = $user->getById($data['userId'])[0];
 
-            if(count($result) <= 0) {
+            if($result['disabled'] == 1 || $result['userGroupId'] == 1 || count($result) <= 0) {
 
                 echo json_encode(array(
                     'success' => false,
@@ -23,10 +26,7 @@
             }
 
             if(md5($data['password']) == $result['password']) {
-
-                /*$this->f3->set('SESSION.USER_ID', $result['userId']);
-                $this->f3->set('SESSION.PASSWORD', $result['password']);*/    
-                
+               
                 $userToken = new UserToken($this->db);
 
                 $data['password'] = '';
