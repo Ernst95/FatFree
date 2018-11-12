@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 09, 2018 at 02:19 PM
+-- Generation Time: Nov 12, 2018 at 02:22 PM
 -- Server version: 5.7.19
 -- PHP Version: 7.1.9
 
@@ -21,6 +21,60 @@ SET time_zone = "+00:00";
 --
 -- Database: `salon`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `appointment`
+--
+
+DROP TABLE IF EXISTS `appointment`;
+CREATE TABLE IF NOT EXISTS `appointment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` datetime NOT NULL,
+  `custUserId` varchar(45) NOT NULL,
+  `empUserId` varchar(45) NOT NULL,
+  `serviceId` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime DEFAULT NULL,
+  `disabled` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `serviceId` (`serviceId`),
+  KEY `custUserId` (`custUserId`),
+  KEY `empUserId` (`empUserId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment`
+--
+
+DROP TABLE IF EXISTS `payment`;
+CREATE TABLE IF NOT EXISTS `payment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` datetime NOT NULL,
+  `appointmentId` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `appointmentId` (`appointmentId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `service`
+--
+
+DROP TABLE IF EXISTS `service`;
+CREATE TABLE IF NOT EXISTS `service` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `price` double NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime DEFAULT NULL,
+  `disabled` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -45,8 +99,10 @@ CREATE TABLE IF NOT EXISTS `user` (
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   `disabled` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=101 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `userGroupId` (`userGroupId`),
+  KEY `userId` (`userId`)
+) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
@@ -152,7 +208,34 @@ INSERT INTO `user` (`id`, `userId`, `password`, `title`, `firstName`, `lastName`
 (97, 'KikeliaM8922', '5f4dcc3b5aa765d61d8327deb882cf99', 'Mrs', 'Kikelia', 'McMechan', '2010-12-01', 'Female', '752-850-7003', '(321) 8484947', 'kmcmechan2o@arizona.edu', 1, '2018-03-27 20:48:52', NULL, 0),
 (98, 'NickieB17a7', '5f4dcc3b5aa765d61d8327deb882cf99', 'Dr', 'Nickie', 'Birrell', '2001-03-23', 'Male', '346-457-3383', '(757) 8690834', 'nbirrell2p@gov.uk', 1, '2018-10-28 23:09:55', NULL, 0),
 (99, 'LauritzS38b9', '5f4dcc3b5aa765d61d8327deb882cf99', 'Dr', 'Lauritz', 'Simoens', '1959-11-27', 'Male', '620-238-9504', '(402) 9189194', 'lsimoens2q@icio.us', 2, '2016-01-23 23:44:21', NULL, 0),
-(100, 'MaddyCaa43', '5f4dcc3b5aa765d61d8327deb882cf99', 'Dr', 'Maddy', 'Chasle', '1995-06-08', 'Female', '769-864-6260', '(717) 7494522', 'mchasle2r@reference.com', 1, '2017-09-16 00:43:42', NULL, 0);
+(100, 'MaddyCaa43', '5f4dcc3b5aa765d61d8327deb882cf99', 'Dr', 'Maddy', 'Chasle', '1995-06-08', 'Female', '769-864-6260', '(717) 7494522', 'mchasle2r@reference.com', 1, '2017-09-16 00:43:42', NULL, 0),
+(101, 'ErnstCd702', '098f6bcd4621d373cade4e832627b4f6', 'Mr', 'Ernst', 'Chapman', '1995-03-09', 'Male', '111-111-115', '(021) 11111111', 'ernstc12345@sourceforge.net', 3, '2018-11-12 10:56:53', NULL, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `usergroup`
+--
+
+DROP TABLE IF EXISTS `usergroup`;
+CREATE TABLE IF NOT EXISTS `usergroup` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime DEFAULT NULL,
+  `disabled` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `usergroup`
+--
+
+INSERT INTO `usergroup` (`id`, `name`, `created`, `modified`, `disabled`) VALUES
+(1, 'Customer', '2018-11-12 12:00:00', NULL, 0),
+(2, 'Employee', '2018-11-12 13:00:00', NULL, 0),
+(3, 'Admin', '2018-11-12 14:00:00', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -169,8 +252,46 @@ CREATE TABLE IF NOT EXISTS `usertoken` (
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   `disabled` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`),
+  KEY `userId` (`userId`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `usertoken`
+--
+
+INSERT INTO `usertoken` (`id`, `userId`, `token`, `expiryDate`, `created`, `modified`, `disabled`) VALUES
+(1, 'MolleeC14ca', '22d0ecb4f60bf40f623f7913165f1777076b79866f194f1804c2a5c01478ec12ecee4064acbda73f81cafd1ac561e6f26c7e7ee05f268ca22a24046de61535c2', '2018-11-12 15:56:40', '2018-11-12 10:56:40', NULL, 0);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `appointment`
+--
+ALTER TABLE `appointment`
+  ADD CONSTRAINT `appointment_ibfk_1` FOREIGN KEY (`serviceId`) REFERENCES `service` (`id`),
+  ADD CONSTRAINT `appointment_ibfk_2` FOREIGN KEY (`custUserId`) REFERENCES `user` (`userId`),
+  ADD CONSTRAINT `appointment_ibfk_3` FOREIGN KEY (`empUserId`) REFERENCES `user` (`userId`);
+
+--
+-- Constraints for table `payment`
+--
+ALTER TABLE `payment`
+  ADD CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`appointmentId`) REFERENCES `appointment` (`id`);
+
+--
+-- Constraints for table `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`userGroupId`) REFERENCES `usergroup` (`id`);
+
+--
+-- Constraints for table `usertoken`
+--
+ALTER TABLE `usertoken`
+  ADD CONSTRAINT `usertoken_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `user` (`userId`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
