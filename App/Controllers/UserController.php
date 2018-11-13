@@ -19,12 +19,25 @@ class UserController extends Controller {
     }
 
     function getAll($f3, $params) {
-        
+
         header('Content-type:application/json');
+
+        $disabled = $params['disabled'];
+
+        if($disabled < 0) {
+
+            echo json_encode(array(
+                'success' => false,
+                'message' => 'Missing one or more required fields'
+            ));
+
+            return;
+
+        }
 
         $user = new User($this->db);
 
-        $result = $user->getAll();
+        $result = $user->getAll($disabled);
 
         echo json_encode(array(
             'success' => true,
