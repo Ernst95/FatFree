@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 12, 2018 at 02:23 PM
+-- Generation Time: Nov 13, 2018 at 07:33 AM
 -- Server version: 5.7.19
 -- PHP Version: 7.1.9
 
@@ -33,6 +33,9 @@ CREATE TABLE IF NOT EXISTS `payment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` datetime NOT NULL,
   `appointmentId` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime DEFAULT NULL,
+  `disabled` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `appointmentId` (`appointmentId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

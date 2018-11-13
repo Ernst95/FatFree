@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 09, 2018 at 02:16 PM
+-- Generation Time: Nov 13, 2018 at 07:34 AM
 -- Server version: 5.7.19
 -- PHP Version: 7.1.9
 
@@ -45,8 +45,10 @@ CREATE TABLE IF NOT EXISTS `user` (
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   `disabled` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=101 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `userGroupId` (`userGroupId`),
+  KEY `userId` (`userId`)
+) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
@@ -152,7 +154,18 @@ INSERT INTO `user` (`id`, `userId`, `password`, `title`, `firstName`, `lastName`
 (97, 'KikeliaM8922', '5f4dcc3b5aa765d61d8327deb882cf99', 'Mrs', 'Kikelia', 'McMechan', '2010-12-01', 'Female', '752-850-7003', '(321) 8484947', 'kmcmechan2o@arizona.edu', 1, '2018-03-27 20:48:52', NULL, 0),
 (98, 'NickieB17a7', '5f4dcc3b5aa765d61d8327deb882cf99', 'Dr', 'Nickie', 'Birrell', '2001-03-23', 'Male', '346-457-3383', '(757) 8690834', 'nbirrell2p@gov.uk', 1, '2018-10-28 23:09:55', NULL, 0),
 (99, 'LauritzS38b9', '5f4dcc3b5aa765d61d8327deb882cf99', 'Dr', 'Lauritz', 'Simoens', '1959-11-27', 'Male', '620-238-9504', '(402) 9189194', 'lsimoens2q@icio.us', 2, '2016-01-23 23:44:21', NULL, 0),
-(100, 'MaddyCaa43', '5f4dcc3b5aa765d61d8327deb882cf99', 'Dr', 'Maddy', 'Chasle', '1995-06-08', 'Female', '769-864-6260', '(717) 7494522', 'mchasle2r@reference.com', 1, '2017-09-16 00:43:42', NULL, 0);
+(100, 'MaddyCaa43', '5f4dcc3b5aa765d61d8327deb882cf99', 'Dr', 'Maddy', 'Chasle', '1995-06-08', 'Female', '769-864-6260', '(717) 7494522', 'mchasle2r@reference.com', 1, '2017-09-16 00:43:42', NULL, 0),
+(101, 'ErnstCd702', '098f6bcd4621d373cade4e832627b4f6', 'Mr', 'Ernst', 'Chapman', '1995-03-09', 'Male', '111-111-115', '(021) 11111111', 'ernstc12345@sourceforge.net', 3, '2018-11-12 10:56:53', NULL, 0);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`userGroupId`) REFERENCES `usergroup` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

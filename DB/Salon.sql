@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 12, 2018 at 02:22 PM
+-- Generation Time: Nov 13, 2018 at 07:30 AM
 -- Server version: 5.7.19
 -- PHP Version: 7.1.9
 
@@ -42,6 +42,25 @@ CREATE TABLE IF NOT EXISTS `appointment` (
   KEY `serviceId` (`serviceId`),
   KEY `custUserId` (`custUserId`),
   KEY `empUserId` (`empUserId`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `appointment_service`
+--
+
+DROP TABLE IF EXISTS `appointment_service`;
+CREATE TABLE IF NOT EXISTS `appointment_service` (
+  `appointmentId` int(11) NOT NULL,
+  `serviceId` int(11) NOT NULL,
+  `quantitiy` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime DEFAULT NULL,
+  `disabled` int(11) NOT NULL,
+  PRIMARY KEY (`appointmentId`,`serviceId`),
+  KEY `serviceId` (`serviceId`) USING BTREE,
+  KEY `appointmentId` (`appointmentId`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -55,6 +74,9 @@ CREATE TABLE IF NOT EXISTS `payment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` datetime NOT NULL,
   `appointmentId` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime DEFAULT NULL,
+  `disabled` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `appointmentId` (`appointmentId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -74,7 +96,15 @@ CREATE TABLE IF NOT EXISTS `service` (
   `modified` datetime DEFAULT NULL,
   `disabled` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `service`
+--
+
+INSERT INTO `service` (`id`, `name`, `price`, `created`, `modified`, `disabled`) VALUES
+(1, 'Blow dry', 30, '2018-11-13 00:00:00', NULL, 0),
+(2, 'Cut', 45, '2018-11-13 00:00:00', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -254,7 +284,7 @@ CREATE TABLE IF NOT EXISTS `usertoken` (
   `disabled` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `usertoken`
@@ -274,6 +304,13 @@ ALTER TABLE `appointment`
   ADD CONSTRAINT `appointment_ibfk_1` FOREIGN KEY (`serviceId`) REFERENCES `service` (`id`),
   ADD CONSTRAINT `appointment_ibfk_2` FOREIGN KEY (`custUserId`) REFERENCES `user` (`userId`),
   ADD CONSTRAINT `appointment_ibfk_3` FOREIGN KEY (`empUserId`) REFERENCES `user` (`userId`);
+
+--
+-- Constraints for table `appointment_service`
+--
+ALTER TABLE `appointment_service`
+  ADD CONSTRAINT `appointment_service_ibfk_1` FOREIGN KEY (`appointmentId`) REFERENCES `appointment` (`id`),
+  ADD CONSTRAINT `appointment_service_ibfk_2` FOREIGN KEY (`serviceId`) REFERENCES `service` (`id`);
 
 --
 -- Constraints for table `payment`

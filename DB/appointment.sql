@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 12, 2018 at 02:23 PM
+-- Generation Time: Nov 13, 2018 at 07:32 AM
 -- Server version: 5.7.19
 -- PHP Version: 7.1.9
 
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `appointment` (
   KEY `serviceId` (`serviceId`),
   KEY `custUserId` (`custUserId`),
   KEY `empUserId` (`empUserId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Constraints for dumped tables
