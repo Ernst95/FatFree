@@ -6,9 +6,9 @@
             parent::__construct($db, 'service');
         }
 
-        public function getAll() {
+        public function getAll($disabled) {
 
-            $query = "SELECT * FROM service";
+            $query = "SELECT * FROM service WHERE disabled = $disabled";
     
             $result = $this->db->exec($query);
     
@@ -16,11 +16,43 @@
         
         }
 
-        public function getByName() {
+        public function getByName($name) {
 
-            $this->load(array('name = ?', $name));
+            $query = "SELECT * FROM service WHERE name = '$name' AND disabled = 0";
 
-            return $this->cast;
+            $result = $this->db->exec($query);
+    
+            return $result;
+
+        }
+
+        public function getById($id) {
+
+            $query = "SELECT * FROM service WHERE id = '$id' AND disabled = 0";
+
+            $result = $this->db->exec($query);
+    
+            return $result;
+
+        }
+
+        public function create($data) {
+
+            $this->load(array('name = ?', $data['name']));
+
+            $this->copyFrom($data);
+
+            $this->save();
+
+        }
+
+        public function delete($data) {
+
+            $this->load(array('name = ?', $data['name']));
+
+            $this->copyFrom($data);
+
+            $this->save();
 
         }
 
