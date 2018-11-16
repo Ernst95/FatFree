@@ -12,7 +12,7 @@ class UserController extends Controller {
 
         $result = $userToken->verifyToken($token);
 
-        if(count($result) <= 0 || $result['expiryDate'] < date('Y-m-d H:i:s')) {
+        if(empty($result) || $result['expiryDate'] < date('Y-m-d H:i:s')) {
             $this->f3->error(403);
         }
 
@@ -82,86 +82,57 @@ class UserController extends Controller {
 
         date_default_timezone_set("Africa/Johannesburg");
 
-        $data = json_decode($f3->get('BODY'), true);
-
-        if(empty($data['title']) || empty($data['firstName']) || empty($data['lastName']) || empty($data['dateOfBirth']) || empty($data['gender']) || empty($data['mobileNumber']) || empty($data['telephoneNumber']) || empty($data['email']) || empty($data['userGroupId'])) {
-
-            echo json_encode(array(
-                'success' => false,
-                'message' => 'Missing one or more required fields'
-            ));
-
-            return;
-
-        }
-
-        if(($data['userGroupId'] == 2 || $data['userGroupId'] == 3) && empty($data['password'])) {
-
-            echo json_encode(array(
-                'success' => false,
-                'message' => 'Missing password field'
-            ));
-
-            return;
-
-        }
-
         $user = new User($this->db);
 
-        $result = $user->getByEmail($data['email']);
-        
-        if(!empty($result)) {
+        $data = json_decode($f3->get('BODY'), true);
 
-            echo json_encode(array(
-                'success' => false,
-                'message' => 'Email already exist'
-            ));
+        if(empty($params['userId'])) {
 
-            return;
-        }
-
-        $result = $user->getByMobileNumber($data['mobileNumber']);
-        
-        if(!empty($result)) {
-
-            echo json_encode(array(
-                'success' => false,
-                'message' => 'Mobile number already exist'
-            ));
-
-            return;
-        }
-
-        if(!empty($params['userId'])) {
-
-            $data['userId'] = $userId;
-    
-            $result = $user->getById($userId);
-
-            if(count($result) <= 0) {
+            $result = $user->getByEmail($data['email']);
             
+            if(!empty($result)) {
+    
                 echo json_encode(array(
                     'success' => false,
-                    'message' => 'User does not exist'
+                    'message' => 'Email already exist'
                 ));
     
                 return;
+            }
     
+            $result = $user->getByMobileNumber($data['mobileNumber']);
+            
+            if(!empty($result)) {
+    
+                echo json_encode(array(
+                    'success' => false,
+                    'message' => 'Mobile number already exist'
+                ));
+    
+                return;
             }
 
-            unset($data['password']);
+            if(empty($data['title']) || empty($data['firstName']) || empty($data['lastName']) || empty($data['dateOfBirth']) || empty($data['gender']) || empty($data['mobileNumber']) || empty($data['telephoneNumber']) || empty($data['email']) || empty($data['userGroupId'])) {
 
-            $user->create($data);
+                echo json_encode(array(
+                    'success' => false,
+                    'message' => 'Missing one or more required fields'
+                ));
 
-            echo json_encode(array(
-                'success' => true,
-                'message' => 'User successfully updated'
-            ));
+                return;
 
-            return;
+            }
 
-        }
-        else {
+            if(($data['userGroupId'] == 2 || $data['userGroupId'] == 3) && empty($data['password'])) {
+
+                echo json_encode(array(
+                    'success' => false,
+                    'message' => 'Missing password field'
+                ));
+
+                return;
+
+            }
 
             do {
 
@@ -180,6 +151,57 @@ class UserController extends Controller {
             echo json_encode(array(
                 'success' => true,
                 'userId' => $data['userId']
+            ));
+
+        }
+        else {
+
+            $data['userId'] = $params['userId'];
+    
+            $result = $user->getById($data['userId']);
+
+            if(empty($result)) {
+            
+                echo json_encode(array(
+                    'success' => false,
+                    'message' => 'User does not exist'
+                ));
+    
+                return;
+    
+            }
+
+            $result = $user->getByEmail($data['email'])[0];
+            
+            if(!empty($result) && ($result['userId'] != $params['userId'])) {
+    
+                echo json_encode(array(
+                    'success' => false,
+                    'message' => 'Email already exist'
+                ));
+    
+                return;
+            }
+    
+            $result = $user->getByMobileNumber($data['mobileNumber'])[0];
+            
+            if(!empty($result) && ($result['userId'] != $params['userId'])) {
+    
+                echo json_encode(array(
+                    'success' => false,
+                    'message' => 'Mobile number already exist'
+                ));
+    
+                return;
+            }
+
+            unset($data['password']);
+
+            $user->create($data);
+
+            echo json_encode(array(
+                'success' => true,
+                'message' => 'User successfully updated'
             ));
 
         }
@@ -207,7 +229,7 @@ class UserController extends Controller {
 
         $result = $user->getById($userId);
 
-        if(count($result) <= 0) {
+        if(empty($result)) {
 
             echo json_encode(array(
                 'success' => false,
