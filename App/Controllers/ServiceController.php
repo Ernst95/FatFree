@@ -4,8 +4,6 @@
 
         function beforeroute() {
 
-            date_default_timezone_set("Africa/Johannesburg");
-
             $userToken = new UserToken($this->db);
 
             $token = $this->f3->get('HEADERS.Token');
@@ -51,8 +49,6 @@
 
             header('Content-type:application/json');
 
-            date_default_timezone_set("Africa/Johannesburg");
-
             $id = $params['id'];
 
             if(empty($id)) {
@@ -92,8 +88,6 @@
 
             header('Content-type:application/json');
 
-            date_default_timezone_set("Africa/Johannesburg");
-
             $name = $params['name'];
 
             if(empty($name)) {
@@ -132,8 +126,6 @@
         function create($f3, $params) {
 
             header('Content-type:application/json');
-    
-            date_default_timezone_set("Africa/Johannesburg");
     
             $data = json_decode($f3->get('BODY'), true);
 

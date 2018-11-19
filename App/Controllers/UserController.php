@@ -4,8 +4,6 @@ class UserController extends Controller {
 
     function beforeroute() {
 
-        date_default_timezone_set("Africa/Johannesburg");
-
         $userToken = new UserToken($this->db);
 
         $token = $this->f3->get('HEADERS.Token');
@@ -79,8 +77,6 @@ class UserController extends Controller {
     function create($f3, $params) {
 
         header('Content-type:application/json');
-
-        date_default_timezone_set("Africa/Johannesburg");
 
         $user = new User($this->db);
 

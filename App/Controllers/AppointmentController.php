@@ -4,8 +4,6 @@
 
         function beforeroute() {
 
-            date_default_timezone_set("Africa/Johannesburg");
-
             $userToken = new UserToken($this->db);
 
             $token = $this->f3->get('HEADERS.Token');
@@ -51,8 +49,6 @@
 
             header('Content-type:application/json');
 
-            date_default_timezone_set("Africa/Johannesburg");
-
             $id = $params['id'];
 
             if(empty($id)) {
@@ -80,9 +76,7 @@
         function create($f3, $params) {
 
             header('Content-type:application/json');
-    
-            date_default_timezone_set("Africa/Johannesburg");
-    
+       
             $data = json_decode($f3->get('BODY'), true);
 
             $appointment = new Appointment($this->db);
@@ -104,7 +98,7 @@
                 
                 $result = $user->getById($data['custUserId'])[0];
         
-                if(empty($result) || ($result['userGr oupId'] != 1)) {
+                if(empty($result) || ($result['userGroupId'] != 1)) {
                 
                     echo json_encode(array(
                         'success' => false,

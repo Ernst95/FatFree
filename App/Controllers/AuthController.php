@@ -6,8 +6,6 @@
 
             header('Content-type:application/json');
 
-            date_default_timezone_set("Africa/Johannesburg");
-
             $data = json_decode($f3->get('BODY'), true);
 
             $user = new User($this->db);
