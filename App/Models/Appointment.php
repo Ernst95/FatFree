@@ -18,7 +18,7 @@
 
         public function getById($id) {
 
-            $query = "SELECT * FROM service WHERE id = '$id' AND disabled = 0";
+            $query = "SELECT * FROM appointment WHERE id = '$id' AND disabled = 0";
 
             $result = $this->db->exec($query);
     
