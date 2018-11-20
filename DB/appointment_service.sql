@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 13, 2018 at 07:33 AM
+-- Generation Time: Nov 20, 2018 at 02:16 PM
 -- Server version: 5.7.19
 -- PHP Version: 7.1.9
 
@@ -32,7 +32,7 @@ DROP TABLE IF EXISTS `appointment_service`;
 CREATE TABLE IF NOT EXISTS `appointment_service` (
   `appointmentId` int(11) NOT NULL,
   `serviceId` int(11) NOT NULL,
-  `quantitiy` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   `disabled` int(11) NOT NULL,
@@ -40,6 +40,13 @@ CREATE TABLE IF NOT EXISTS `appointment_service` (
   KEY `serviceId` (`serviceId`) USING BTREE,
   KEY `appointmentId` (`appointmentId`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `appointment_service`
+--
+
+INSERT INTO `appointment_service` (`appointmentId`, `serviceId`, `quantity`, `created`, `modified`, `disabled`) VALUES
+(1, 1, 3, '2018-11-20 12:25:02', '2018-11-20 14:33:19', 1);
 
 --
 -- Constraints for dumped tables

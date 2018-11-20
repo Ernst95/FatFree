@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 13, 2018 at 07:30 AM
+-- Generation Time: Nov 20, 2018 at 02:12 PM
 -- Server version: 5.7.19
 -- PHP Version: 7.1.9
 
@@ -34,15 +34,23 @@ CREATE TABLE IF NOT EXISTS `appointment` (
   `date` datetime NOT NULL,
   `custUserId` varchar(45) NOT NULL,
   `empUserId` varchar(45) NOT NULL,
-  `serviceId` int(11) NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   `disabled` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `serviceId` (`serviceId`),
   KEY `custUserId` (`custUserId`),
   KEY `empUserId` (`empUserId`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `appointment`
+--
+
+INSERT INTO `appointment` (`id`, `date`, `custUserId`, `empUserId`, `created`, `modified`, `disabled`) VALUES
+(1, '2018-11-20 14:00:00', 'CorbyH298e', 'MolleeC14ca', '2018-11-19 12:15:38', '2018-11-19 13:10:23', 0),
+(2, '2018-12-01 12:00:00', 'CorbyH298e', 'MolleeC14ca', '2018-11-19 12:18:37', '2018-11-19 13:10:28', 0),
+(3, '2018-12-01 12:00:00', 'CorbyH298e', 'MolleeC14ca', '2018-11-19 14:45:32', NULL, 0),
+(4, '2018-12-01 12:00:00', 'CorbyH298e', 'MolleeC14ca', '2018-11-20 12:19:12', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -54,7 +62,7 @@ DROP TABLE IF EXISTS `appointment_service`;
 CREATE TABLE IF NOT EXISTS `appointment_service` (
   `appointmentId` int(11) NOT NULL,
   `serviceId` int(11) NOT NULL,
-  `quantitiy` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   `disabled` int(11) NOT NULL,
@@ -62,6 +70,13 @@ CREATE TABLE IF NOT EXISTS `appointment_service` (
   KEY `serviceId` (`serviceId`) USING BTREE,
   KEY `appointmentId` (`appointmentId`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `appointment_service`
+--
+
+INSERT INTO `appointment_service` (`appointmentId`, `serviceId`, `quantity`, `created`, `modified`, `disabled`) VALUES
+(1, 1, 3, '2018-11-20 12:25:02', '2018-11-20 14:33:19', 1);
 
 -- --------------------------------------------------------
 
@@ -96,15 +111,17 @@ CREATE TABLE IF NOT EXISTS `service` (
   `modified` datetime DEFAULT NULL,
   `disabled` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `service`
 --
 
 INSERT INTO `service` (`id`, `name`, `price`, `created`, `modified`, `disabled`) VALUES
-(1, 'Blow dry', 30, '2018-11-13 00:00:00', NULL, 0),
-(2, 'Cut', 45, '2018-11-13 00:00:00', NULL, 0);
+(1, 'Blow dry', 100, '2018-11-13 00:00:00', '2018-11-13 15:53:00', 0),
+(2, 'Cut', 45, '2018-11-13 00:00:00', '2018-11-13 15:53:14', 1),
+(3, 'Wash', 300, '2018-11-13 15:44:39', '2018-11-13 17:03:38', 0),
+(4, 'Relax', 300, '2018-11-13 17:05:07', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -132,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`) USING BTREE,
   KEY `userGroupId` (`userGroupId`),
   KEY `userId` (`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
@@ -239,7 +256,9 @@ INSERT INTO `user` (`id`, `userId`, `password`, `title`, `firstName`, `lastName`
 (98, 'NickieB17a7', '5f4dcc3b5aa765d61d8327deb882cf99', 'Dr', 'Nickie', 'Birrell', '2001-03-23', 'Male', '346-457-3383', '(757) 8690834', 'nbirrell2p@gov.uk', 1, '2018-10-28 23:09:55', NULL, 0),
 (99, 'LauritzS38b9', '5f4dcc3b5aa765d61d8327deb882cf99', 'Dr', 'Lauritz', 'Simoens', '1959-11-27', 'Male', '620-238-9504', '(402) 9189194', 'lsimoens2q@icio.us', 2, '2016-01-23 23:44:21', NULL, 0),
 (100, 'MaddyCaa43', '5f4dcc3b5aa765d61d8327deb882cf99', 'Dr', 'Maddy', 'Chasle', '1995-06-08', 'Female', '769-864-6260', '(717) 7494522', 'mchasle2r@reference.com', 1, '2017-09-16 00:43:42', NULL, 0),
-(101, 'ErnstCd702', '098f6bcd4621d373cade4e832627b4f6', 'Mr', 'Ernst', 'Chapman', '1995-03-09', 'Male', '111-111-115', '(021) 11111111', 'ernstc12345@sourceforge.net', 3, '2018-11-12 10:56:53', NULL, 0);
+(101, 'ErnstCd702', '098f6bcd4621d373cade4e832627b4f6', 'Mr', 'Ernst3', 'Chapman3', '1995-03-09', 'Male', '111-111-117', '(021) 11111111', 'ernstc1234567@sourceforge.net', 1, '2018-11-12 10:56:53', NULL, 0),
+(102, 'Ernst4C46a2', 'd41d8cd98f00b204e9800998ecf8427e', 'Mr', 'Ernst4', 'Chapman4', '1995-03-09', 'Male', '111-111-118', '(021) 11111111', 'ernstc12345678@sourceforge.net', 1, '2018-11-16 08:10:12', NULL, 0),
+(103, 'Ernst5C61b3', '098f6bcd4621d373cade4e832627b4f6', 'Mr', 'Ernst5', 'Chapman', '1995-03-09', 'Male', '111-111-119', '(021) 11111111', 'ernstc123456789@sourceforge.net', 3, '2018-11-19 14:51:37', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -284,14 +303,15 @@ CREATE TABLE IF NOT EXISTS `usertoken` (
   `disabled` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `usertoken`
 --
 
 INSERT INTO `usertoken` (`id`, `userId`, `token`, `expiryDate`, `created`, `modified`, `disabled`) VALUES
-(1, 'MolleeC14ca', '22d0ecb4f60bf40f623f7913165f1777076b79866f194f1804c2a5c01478ec12ecee4064acbda73f81cafd1ac561e6f26c7e7ee05f268ca22a24046de61535c2', '2018-11-12 15:56:40', '2018-11-12 10:56:40', NULL, 0);
+(1, 'MolleeC14ca', '22d0ecb4f60bf40f623f7913165f1777076b79866f194f1804c2a5c01478ec12ecee4064acbda73f81cafd1ac561e6f26c7e7ee05f268ca22a24046de61535c2', '2018-11-12 15:56:40', '2018-11-12 10:56:40', NULL, 0),
+(2, 'ErnstCd702', 'b985d4e2117d8e4680639f046b8fada9eedc3dca4e226974d1e508205996882f81ee887ad89253d4fb29be03558c14d402a23ada373cd8284e062bcb37ea60ab', '2018-11-21 13:01:19', '2018-11-16 08:01:19', NULL, 0);
 
 --
 -- Constraints for dumped tables
@@ -301,7 +321,6 @@ INSERT INTO `usertoken` (`id`, `userId`, `token`, `expiryDate`, `created`, `modi
 -- Constraints for table `appointment`
 --
 ALTER TABLE `appointment`
-  ADD CONSTRAINT `appointment_ibfk_1` FOREIGN KEY (`serviceId`) REFERENCES `service` (`id`),
   ADD CONSTRAINT `appointment_ibfk_2` FOREIGN KEY (`custUserId`) REFERENCES `user` (`userId`),
   ADD CONSTRAINT `appointment_ibfk_3` FOREIGN KEY (`empUserId`) REFERENCES `user` (`userId`);
 

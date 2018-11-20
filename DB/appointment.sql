@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 13, 2018 at 07:32 AM
+-- Generation Time: Nov 20, 2018 at 02:16 PM
 -- Server version: 5.7.19
 -- PHP Version: 7.1.9
 
@@ -34,15 +34,23 @@ CREATE TABLE IF NOT EXISTS `appointment` (
   `date` datetime NOT NULL,
   `custUserId` varchar(45) NOT NULL,
   `empUserId` varchar(45) NOT NULL,
-  `serviceId` int(11) NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime DEFAULT NULL,
   `disabled` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `serviceId` (`serviceId`),
   KEY `custUserId` (`custUserId`),
   KEY `empUserId` (`empUserId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `appointment`
+--
+
+INSERT INTO `appointment` (`id`, `date`, `custUserId`, `empUserId`, `created`, `modified`, `disabled`) VALUES
+(1, '2018-11-20 14:00:00', 'CorbyH298e', 'MolleeC14ca', '2018-11-19 12:15:38', '2018-11-19 13:10:23', 0),
+(2, '2018-12-01 12:00:00', 'CorbyH298e', 'MolleeC14ca', '2018-11-19 12:18:37', '2018-11-19 13:10:28', 0),
+(3, '2018-12-01 12:00:00', 'CorbyH298e', 'MolleeC14ca', '2018-11-19 14:45:32', NULL, 0),
+(4, '2018-12-01 12:00:00', 'CorbyH298e', 'MolleeC14ca', '2018-11-20 12:19:12', NULL, 0);
 
 --
 -- Constraints for dumped tables
@@ -52,7 +60,6 @@ CREATE TABLE IF NOT EXISTS `appointment` (
 -- Constraints for table `appointment`
 --
 ALTER TABLE `appointment`
-  ADD CONSTRAINT `appointment_ibfk_1` FOREIGN KEY (`serviceId`) REFERENCES `service` (`id`),
   ADD CONSTRAINT `appointment_ibfk_2` FOREIGN KEY (`custUserId`) REFERENCES `user` (`userId`),
   ADD CONSTRAINT `appointment_ibfk_3` FOREIGN KEY (`empUserId`) REFERENCES `user` (`userId`);
 COMMIT;
