@@ -20,9 +20,9 @@ class Controller {
         $this->f3 = $f3;
 
         $db = new DB\SQL(
-            'mysql:host=localhost;port=3306;dbname=salon',
-            'root',
-            '',
+            $f3->get('mysql.db'),
+            $f3->get('mysql.username'),
+            $f3->get('mysql.password'),
             array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION)
         );
 
