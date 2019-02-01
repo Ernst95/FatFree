@@ -8,56 +8,99 @@
 
         public function getAll($disabled) {
 
-            $query = "SELECT * FROM appointment_service WHERE disabled = $disabled";
+            try {
 
-            $result = $this->db->exec($query);
+                $query = "SELECT * FROM appointment_service WHERE disabled = $disabled";
 
-            return $result;
+                $result = $this->db->exec($query);
+    
+                return $result;
+
+            }
+            catch(Exception $e) {
+
+                throw new Exception($e);
+
+            }            
 
         }
 
         public function getById($appointmentId, $serviceId) {
 
-            $query = "SELECT * FROM appointment_service WHERE appointmentId = $appointmentId AND serviceId = $serviceId AND disabled = 0";
+            try {
 
-            $result = $this->db->exec($query);
+                $query = "SELECT * FROM appointment_service WHERE appointmentId = $appointmentId AND serviceId = $serviceId AND disabled = 0";
 
-            return $result;
+                $result = $this->db->exec($query);
+    
+                return $result;
+
+            }
+            catch(Exception $e) {
+
+                throw new Exception($e);
+
+            }
 
         }
 
         public function getAppointmentById($appointmentId) {
 
-            $query = "SELECT * FROM appointment_service WHERE appointmentId = $appointmentId AND disabled = 0";
+            try {
 
-            $this->db->exec($query);
+                $query = "SELECT * FROM appointment_service WHERE appointmentId = $appointmentId AND disabled = 0";
 
-            return $result;
+                $this->db->exec($query);
+    
+                return $result;
+
+            }
+            catch(Exception $e) {
+
+                throw new Exception($e);
+
+            }
 
         }
 
         public function create($data) {
 
-            $this->load(array('appointmentId = ? AND serviceId = ?', $data['appointmentId'], $data['serviceId']));
+            try {
 
-            $this->copyFrom($data);
+                $this->load(array('appointmentId = ? AND serviceId = ?', $data['appointmentId'], $data['serviceId']));
 
-            $this->save();
+                $this->copyFrom($data);
+    
+                $this->save();
+                
+            }
+            catch(Exception $e) {
+
+                throw new Exception($e);
+
+            }
 
         }
 
         public function delete($data) {
 
-            $this->load(array('appointmentId = ? AND serviceId = ?', $data['appointmentId'], $data['serviceId']));
+            try {
 
-            $this->copyFrom($data);
+                $this->load(array('appointmentId = ? AND serviceId = ?', $data['appointmentId'], $data['serviceId']));
 
-            $this->save();
+                $this->copyFrom($data);
+    
+                $this->save();
+                
+            }
+            catch(Exception $e) {
+
+                throw new Exception($e);
+
+            }
 
         }
 
-
     }
-
 
 ?>

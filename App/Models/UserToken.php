@@ -8,25 +8,43 @@
 
         public function generateToken($data) {
 
-            $token = bin2hex(random_bytes(64));
-
-            $data['token'] = $token;
-
-            $this->load(array('userId = ?', $data['userId']));
-
-            $this->copyFrom($data);
+            try {
     
-            $this->save();
-            
-            return $token;
+                $token = bin2hex(random_bytes(64));
+
+                $data['token'] = $token;
+
+                $this->load(array('userId = ?', $data['userId']));
+
+                $this->copyFrom($data);
+        
+                $this->save();
+                
+                return $token;
+
+            }
+            catch(Exception $e) {
+                
+                throw new Exception($e);
+
+            }
 
         }
 
         public function verifyToken($data) {
 
-            $this->load(array('token = ?', $data));
+            try {
+    
+                $this->load(array('token = ?', $data));
 
-            return $this->cast(); 
+                return $this->cast(); 
+
+            }
+            catch(Exception $e) {
+                
+                throw new Exception($e);
+
+            }
 
         }
 

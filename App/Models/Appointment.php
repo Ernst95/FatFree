@@ -8,42 +8,77 @@
 
         public function getAll($disabled) {
 
-            $query = "SELECT * FROM appointment WHERE disabled = $disabled";
+            try {
+
+                $query = "SELECT * FROM appointment WHERE disabled = $disabled";
     
-            $result = $this->db->exec($query);
-    
-            return $result;
+                $result = $this->db->exec($query);
+        
+                return $result;
+
+            }
+            catch(Exception $e) {
+
+                throw new Exception($e);
+
+            }
         
         }
 
         public function getById($id) {
 
-            $query = "SELECT * FROM appointment WHERE id = '$id' AND disabled = 0";
+            try {
 
-            $result = $this->db->exec($query);
-    
-            return $result;
+                $query = "SELECT * FROM appointment WHERE id = '$id' AND disabled = 0";
 
+                $result = $this->db->exec($query);
+        
+                return $result;   
+
+            }
+            catch(Exception $e) {
+
+                throw new Exception($e);
+
+            }            
+            
         }
 
         public function create($data) {
 
-            $this->load(array('id = ?', $data['id']));
+            try {
 
-            $this->copyFrom($data);
+                $this->load(array('id = ?', $data['id']));
 
-            $this->save();
+                $this->copyFrom($data);
+
+                $this->save();   
+
+            }
+            catch(Exception $e) {
+
+                throw new Exception($e);
+
+            }
 
         }
 
         public function delete($data) {
 
-            $this->load(array('id = ?', $data['id']));
+            try {
 
-            $this->copyFrom($data);
+                $this->load(array('id = ?', $data['id']));
 
-            $this->save();
+                $this->copyFrom($data);
+    
+                $this->save();
 
+            }
+            catch(Exception $e) {
+
+                throw new Exception($e);
+
+            }
         }
 
     }

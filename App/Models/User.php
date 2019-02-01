@@ -8,71 +8,134 @@ class User extends DB\SQL\Mapper{
 
     public function getAll($disabled) {
 
-        $query = "SELECT * FROM user WHERE disabled = $disabled";
+        try {
 
-        $result = $this->db->exec($query);
+            $query = "SELECT * FROM user WHERE test = $disabled";
 
-        return $result;
+            $result = $this->db->exec($query);
+    
+            return $result;
+
+        }
+        catch(Exception $e) {
+
+            throw new Exception($e);
+
+        }
     
     }
 
     public function getById($userId) {
 
-        $query = "SELECT * FROM user WHERE userId = '$userId' AND disabled = 0";
+        try {
 
-        $result = $this->db->exec($query);
+            $query = "SELECT * FROM user WHERE userId = '$userId' AND disabled = 0";
 
-        return $result;
+            $result = $this->db->exec($query);
+    
+            return $result;
+
+        }
+        catch(Exception $e) {
+
+            throw new Exception($e);
+
+        }
 
     }
 
     public function getByEmail($email) {
 
-        $query = "SELECT * FROM user WHERE email = '$email' AND disabled = 0";
+        try {
 
-        $result = $this->db->exec($query);
+            $query = "SELECT * FROM user WHERE email = '$email' AND disabled = 0";
 
-        return $result;
+            $result = $this->db->exec($query);
+    
+            return $result;
+
+        }
+        catch(Exception $e) {
+
+            throw new Exception($e);
+
+        }
 
     }
 
     public function getByMobileNumber($mobileNumber) {
 
-        $query = "SELECT * FROM user WHERE mobileNumber = '$mobileNumber' AND disabled = 0";
+        try {
 
-        $result = $this->db->exec($query);
+            $query = "SELECT * FROM user WHERE mobileNumber = '$mobileNumber' AND disabled = 0";
 
-        return $result;
+            $result = $this->db->exec($query);
+    
+            return $result;
+
+        }
+        catch(Exception $e) {
+
+            throw new Exception($e);
+
+        }
     
     }
 
     public function getByUserGroupId($userGroupId) {
 
-        $query = "SELECT * FROM user WHERE userGroupId = '$userGroupId' AND disabled = 0";
+        try {
 
-        $result = $this->db->exec($query);
+            $query = "SELECT * FROM user WHERE userGroupId = '$userGroupId' AND disabled = 0";
 
-        return $result;
+            $result = $this->db->exec($query);
+    
+            return $result;
+
+        }
+        catch(Exception $e) {
+
+            throw new Exception($e);
+
+        }
     
     }
 
     public function create($data) {
 
-        $this->load(array('userId = ?', $data['userId']));
+        try {
 
-        $this->copyFrom($data);
+            $this->load(array('userId = ?', $data['userId']));
 
-        $this->save();
+            $this->copyFrom($data);
+    
+            $this->save();
+
+        }
+        catch(Exception $e) {
+
+            throw new Exception($e);
+
+        }
 
     }
 
     public function delete($data) {
 
-        $this->load(array('userId = ?', $data['userId']));
+        try {
 
-        $this->copyFrom($data);
+            $this->load(array('userId = ?', $data['userId']));
 
-        $this->save();
+            $this->copyFrom($data);
+    
+            $this->save();
+
+        }
+        catch(Exception $e) {
+
+            throw new Exception($e);
+
+        }
 
     }
 

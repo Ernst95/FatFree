@@ -20,95 +20,11 @@ class UserController extends Controller {
 
         header('Content-type:application/json');
 
-        $disabled = $params['disabled'];
+        try {
 
-        if($disabled < 0) {
+            $disabled = $params['disabled'];
 
-            echo json_encode(array(
-                'success' => false,
-                'message' => 'Missing one or more required fields'
-            ));
-
-            return;
-
-        }
-
-        $user = new User($this->db);
-
-        $result = $user->getAll($disabled);
-
-        echo json_encode(array(
-            'success' => true,
-            'count' => count($result),
-            'results' => $result
-        ));
-
-    }
-
-    function getUser($f3, $params) {
-        
-        header('Content-type:application/json');
-
-        $userId = $params['userId'];
-
-        if(empty($userId)) {
-
-            echo json_encode(array(
-                'success' => false,
-                'message' => 'Missing one or more required fields'
-            ));
-
-            return;
-
-        }
-
-        $user = new User($this->db);
-
-        $result = $user->getById($userId);
-
-        echo json_encode(array(
-            'success' => true,
-            'count' => count($result),
-            'results' => $result
-        ));
-
-    }
-
-    function create($f3, $params) {
-
-        header('Content-type:application/json');
-
-        $user = new User($this->db);
-
-        $data = json_decode($f3->get('BODY'), true);
-
-        if(empty($params['userId'])) {
-
-            $result = $user->getByEmail($data['email']);
-            
-            if(!empty($result)) {
-    
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Email already exist'
-                ));
-    
-                return;
-            }
-    
-            $result = $user->getByMobileNumber($data['mobileNumber']);
-            
-            if(!empty($result)) {
-    
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Mobile number already exist'
-                ));
-    
-                return;
-            }
-
-            if(empty($data['title']) || empty($data['firstName']) || empty($data['lastName']) || empty($data['dateOfBirth']) || empty($data['gender']) || empty($data['mobileNumber']) || empty($data['telephoneNumber']) || empty($data['email']) || empty($data['userGroupId'])) {
+            if($disabled < 0) {
 
                 echo json_encode(array(
                     'success' => false,
@@ -119,85 +35,205 @@ class UserController extends Controller {
 
             }
 
-            if(($data['userGroupId'] == 2 || $data['userGroupId'] == 3) && empty($data['password'])) {
+            $user = new User($this->db);
 
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Missing password field'
-                ));
-
-                return;
-
-            }
-
-            do {
-
-                $data['userId'] = $data['firstName'] . $data['lastName'][0] . bin2hex(random_bytes(2));
-
-                $result = $user->getById($data['userId']);
-
-            } while(!empty($result));
-
-            $data['password'] = md5($data['password']);
-            $data['created'] = date('Y-m-d H:i:s');
-            $data['disabled'] = 0;
-
-            $user->create($data);
+            $result = $user->getAll($disabled);
 
             echo json_encode(array(
                 'success' => true,
-                'userId' => $data['userId']
+                'count' => count($result),
+                'results' => $result
             ));
 
         }
-        else {
+        catch(Exception $e) {
 
-            $data['userId'] = $params['userId'];
-    
-            $result = $user->getById($data['userId']);
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
 
-            if(empty($result)) {
-            
+        }        
+
+    }
+
+    function getUser($f3, $params) {
+        
+        header('Content-type:application/json');
+
+        try {
+
+            $userId = $params['userId'];
+
+            if(empty($userId)) {
+
                 echo json_encode(array(
                     'success' => false,
-                    'message' => 'User does not exist'
+                    'message' => 'Missing one or more required fields'
                 ));
-    
+
                 return;
-    
+
             }
 
-            $result = $user->getByEmail($data['email'])[0];
-            
-            if(!empty($result) && ($result['userId'] != $params['userId'])) {
-    
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Email already exist'
-                ));
-    
-                return;
-            }
-    
-            $result = $user->getByMobileNumber($data['mobileNumber'])[0];
-            
-            if(!empty($result) && ($result['userId'] != $params['userId'])) {
-    
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Mobile number already exist'
-                ));
-    
-                return;
-            }
+            $user = new User($this->db);
 
-            unset($data['password']);
-
-            $user->create($data);
+            $result = $user->getById($userId);
 
             echo json_encode(array(
                 'success' => true,
-                'message' => 'User successfully updated'
+                'count' => count($result),
+                'results' => $result
+            ));
+
+        }
+        catch(Exception $e) {
+
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
+
+        }
+
+    }
+
+    function create($f3, $params) {
+
+        header('Content-type:application/json');
+
+        try {
+
+            $user = new User($this->db);
+
+            $data = json_decode($f3->get('BODY'), true);
+
+            if(empty($params['userId'])) {
+
+                $result = $user->getByEmail($data['email']);
+                
+                if(!empty($result)) {
+        
+                    echo json_encode(array(
+                        'success' => false,
+                        'message' => 'Email already exist'
+                    ));
+        
+                    return;
+                }
+        
+                $result = $user->getByMobileNumber($data['mobileNumber']);
+                
+                if(!empty($result)) {
+        
+                    echo json_encode(array(
+                        'success' => false,
+                        'message' => 'Mobile number already exist'
+                    ));
+        
+                    return;
+                }
+
+                if(empty($data['title']) || empty($data['firstName']) || empty($data['lastName']) || empty($data['dateOfBirth']) || empty($data['gender']) || empty($data['mobileNumber']) || empty($data['telephoneNumber']) || empty($data['email']) || empty($data['userGroupId'])) {
+
+                    echo json_encode(array(
+                        'success' => false,
+                        'message' => 'Missing one or more required fields'
+                    ));
+
+                    return;
+
+                }
+
+                if(($data['userGroupId'] == 2 || $data['userGroupId'] == 3) && empty($data['password'])) {
+
+                    echo json_encode(array(
+                        'success' => false,
+                        'message' => 'Missing password field'
+                    ));
+
+                    return;
+
+                }
+
+                do {
+
+                    $data['userId'] = $data['firstName'] . $data['lastName'][0] . bin2hex(random_bytes(2));
+
+                    $result = $user->getById($data['userId']);
+
+                } while(!empty($result));
+
+                $data['password'] = md5($data['password']);
+                $data['created'] = date('Y-m-d H:i:s');
+                $data['disabled'] = 0;
+
+                $user->create($data);
+
+                echo json_encode(array(
+                    'success' => true,
+                    'userId' => $data['userId']
+                ));
+
+            }
+            else {
+
+                $data['userId'] = $params['userId'];
+        
+                $result = $user->getById($data['userId']);
+
+                if(empty($result)) {
+                
+                    echo json_encode(array(
+                        'success' => false,
+                        'message' => 'User does not exist'
+                    ));
+        
+                    return;
+        
+                }
+
+                $result = $user->getByEmail($data['email'])[0];
+                
+                if(!empty($result) && ($result['userId'] != $params['userId'])) {
+        
+                    echo json_encode(array(
+                        'success' => false,
+                        'message' => 'Email already exist'
+                    ));
+        
+                    return;
+                }
+        
+                $result = $user->getByMobileNumber($data['mobileNumber'])[0];
+                
+                if(!empty($result) && ($result['userId'] != $params['userId'])) {
+        
+                    echo json_encode(array(
+                        'success' => false,
+                        'message' => 'Mobile number already exist'
+                    ));
+        
+                    return;
+                }
+
+                unset($data['password']);
+
+                $user->create($data);
+
+                echo json_encode(array(
+                    'success' => true,
+                    'message' => 'User successfully updated'
+                ));
+
+            }
+
+        }
+        catch(Exception $e) {
+
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
             ));
 
         }
@@ -208,44 +244,56 @@ class UserController extends Controller {
 
         header('Content-type:application/json');
 
-        $userId = $params['userId'];
+        try {
 
-        if(empty($userId)) {
+            $userId = $params['userId'];
 
-            echo json_encode(array(
-                'success' => false,
-                'message' => 'Missing one or more required fields'
-            ));
+            if(empty($userId)) {
+
+                echo json_encode(array(
+                    'success' => false,
+                    'message' => 'Missing one or more required fields'
+                ));
+                
+                return;
             
-            return;
-        
+            }
+
+            $user = new User($this->db);
+
+            $result = $user->getById($userId);
+
+            if(empty($result)) {
+
+                echo json_encode(array(
+                    'success' => false,
+                    'message' => 'User does not exist'
+                ));
+
+                return;
+
+            }
+
+            $data['modified'] = date('Y-m-d H:i:s');
+            $data['userId'] = $userId;
+            $data['disabled'] = 1;
+
+            $user->delete($data);
+
+            echo json_encode(array(
+                'success' => true,
+                'message' => 'User successfully deactivated'
+            ));
+
         }
-
-        $user = new User($this->db);
-
-        $result = $user->getById($userId);
-
-        if(empty($result)) {
+        catch(Exception $e) {
 
             echo json_encode(array(
                 'success' => false,
-                'message' => 'User does not exist'
+                'message' => $e->getMessage()
             ));
 
-            return;
-
-        }
-
-        $data['modified'] = date('Y-m-d H:i:s');
-        $data['userId'] = $userId;
-        $data['disabled'] = 1;
-
-        $user->delete($data);
-
-        echo json_encode(array(
-            'success' => true,
-            'message' => 'User successfully deactivated'
-        ));
+        }       
 
     }
 
