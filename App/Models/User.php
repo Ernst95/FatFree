@@ -10,7 +10,7 @@ class User extends DB\SQL\Mapper{
 
         try {
 
-            $query = "SELECT * FROM user WHERE test = $disabled";
+            $query = "SELECT * FROM user WHERE disabled = $disabled";
 
             $result = $this->db->exec($query);
     
