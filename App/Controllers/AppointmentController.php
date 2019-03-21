@@ -1,8 +1,11 @@
 <?php
 
-    class AppointmentController extends Controller {
+class AppointmentController extends Controller {
 
-        function beforeroute() {
+    function beforeroute() {
+        
+        //Check to make sure token passed is valid
+        try {
 
             $userToken = new UserToken($this->db);
 
@@ -15,10 +18,26 @@
             }
 
         }
+        catch(Exception $e) {
 
-        function getAll($f3, $params) {
+            header('Content-type:application/json');
 
-            header('Content-type:application/json'); 
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
+            
+            exit;
+
+        }
+
+    }
+
+    function getAll($f3, $params) {
+
+        header('Content-type:application/json');
+
+        try {
 
             $disabled = $params['disabled'];
 
@@ -44,10 +63,22 @@
             ));
 
         }
+        catch(Exception $e) {
 
-        function getById($f3, $params) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
 
-            header('Content-type:application/json');
+        }
+
+    }
+
+    function getById($f3, $params) {
+
+        header('Content-type:application/json');
+
+        try {
 
             $id = $params['id'];
 
@@ -69,14 +100,26 @@
                 'success' => true,
                 'count' => count($result),
                 'results' => $result
+            ));    
+
+        }
+        catch(Exception $e) {
+
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
             ));
 
         }
 
-        function create($f3, $params) {
+    }
 
-            header('Content-type:application/json');
-       
+    function create($f3, $params) {
+
+        header('Content-type:application/json');
+    
+        try {
+
             $data = json_decode($f3->get('BODY'), true);
 
             $appointment = new Appointment($this->db);
@@ -163,15 +206,27 @@
                 return;
             
             }
-            
+
         }
+        catch(Exception $e) {
 
-        function delete($f3, $params) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
 
-            header('Content-type:application/json');
-    
+        }
+        
+    }
+
+    function delete($f3, $params) {
+
+        header('Content-type:application/json');
+
+        try {
+
             $id = $params['id'];
-    
+
             if(empty($id)) {
     
                 echo json_encode(array(
@@ -208,9 +263,19 @@
                 'success' => true,
                 'message' => 'Appointment successfully deactivated'
             ));
-    
+
+        }
+        catch(Exception $e) {
+
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
+
         }
 
     }
+
+}
 
 ?>

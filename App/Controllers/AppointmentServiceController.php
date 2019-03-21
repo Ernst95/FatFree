@@ -1,8 +1,11 @@
 <?php 
 
-    class AppointmentServiceController extends Controller {
+class AppointmentServiceController extends Controller {
 
-        function beforeroute() {
+    function beforeroute() {
+
+        //Check to make sure token passed is valid
+        try {
 
             $userToken = new UserToken($this->db);
 
@@ -15,10 +18,26 @@
             }
 
         }
-
-        function getAll($f3, $params) {
+        catch(Exception $e) {
 
             header('Content-type:application/json');
+
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
+            
+            exit;
+
+        }        
+
+    }
+
+    function getAll($f3, $params) {
+
+        header('Content-type:application/json');
+
+        try {
 
             $appointmentService = new AppointmentService($this->db);
 
@@ -41,14 +60,26 @@
                 'success' => true,
                 'count' => count($result),
                 'results' => $result
-            ));
+            )); 
 
         }
+        catch(Exception $e) {
 
-        function getById($f3, $params) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
 
-            header('Content-type:application/json');
+        } 
 
+    }
+
+    function getById($f3, $params) {
+
+        header('Content-type:application/json');
+
+        try {
+                
             if(empty($params['appointmentId']) || empty($params['serviceId'])) {
 
                 echo json_encode(array(
@@ -68,13 +99,25 @@
                 'success' => true,
                 'count' => count($result),
                 'results' => $result
-            ));                      
+            ));
 
         }
+        catch(Exception $e) {
 
-        function getAppointmentById($f3, $params) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
 
-            header('Content-type:application/json');
+        }                       
+
+    }
+
+    function getAppointmentById($f3, $params) {
+
+        header('Content-type:application/json');
+
+        try {
 
             if(empty($params['appointmentId'])) {
 
@@ -82,27 +125,40 @@
                     'success' => false,
                     'message' => 'Missing one or more required fields'
                 ));
-
+    
                 return;
-
+    
             }
-
+    
             $appointmentService = new AppointmentService($this->db);
-
+    
             $result = $appointmentService->getAppointmentById($params['appointmentId']);
-
+    
             echo json_encode(array(
                 'success' => true,
                 'count' => count($result),
                 'results' => $result
-            ));
+            ));    
 
         }
+        catch(Exception $e) {
 
-        function create($f3, $params) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
 
-            header('Content-type:application/json');
-       
+        } 
+
+    }
+
+    function create($f3, $params) {
+
+        header('Content-type:application/json');
+    
+        try {
+
+            
             $data = json_decode($f3->get('BODY'), true);
 
             $appointmentService = new AppointmentService($this->db);
@@ -114,7 +170,7 @@
             if(empty($params['appointmentId']) && empty($params['serviceId'])) {
 
                 if(empty($data['appointmentId']) || empty($data['serviceId']) || empty($data['quantity'])) {
-    
+
                     echo json_encode(array(
                         'success' => false,
                         'message' => 'Missing one or more required fields'
@@ -136,7 +192,7 @@
                     return;
         
                 }
-    
+
                 $result = $service->getById($data['serviceId'])[0];
         
                 if(empty($result)) {
@@ -149,17 +205,17 @@
                     return;
         
                 }
-    
+
                 $data['created'] = date('Y-m-d H:i:s');
                 $data['disabled'] = 0;
-    
+
                 $appointmentService->create($data);
-    
+
                 echo json_encode(array(
                     'success' => true,
                     'message' => 'Appointment service successfully created'
                 ));
-    
+
             }
             else {
 
@@ -175,7 +231,7 @@
                 }
         
                 $result = $appointmentService->getById($params['appointmentId'], $params['serviceId']);
-    
+
                 if(empty($result)) {
                 
                     echo json_encode(array(
@@ -192,62 +248,84 @@
                 $data['modified'] = date('Y-m-d H:i:s');
         
                 $appointmentService->create($data);
-    
+
                 echo json_encode(array(
                     'success' => true,
                     'message' => 'Appointment service successfully updated'
                 ));
-    
+
                 return;
             
             }
-            
+
         }
+        catch(Exception $e) {
 
-        function delete($f3, $params) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
 
-            header('Content-type:application/json');
+        }
+        
+    }
 
+    function delete($f3, $params) {
+
+        header('Content-type:application/json');
+
+        try {
+            
             if(empty($params['appointmentId']) || empty($params['serviceId'])) {
 
                 echo json_encode(array(
                     'success' => false,
                     'message' => 'Missing one or more required fields'
                 ));
-
+    
                 return;
-
+    
             }
-
+    
             $appointmentService = new AppointmentService($this->db);
-
+    
             $result = $appointmentService->getById($params['appointmentId'], $params['serviceId']);
-
+    
             if(empty($result)) {
-
+    
                 echo json_encode(array(
                     'success' => false,
                     'message' => 'Appointment service does not exist'
                 ));
-
+    
                 return;
-
+    
             }
-
+    
             $data['appointmentId'] = $params['appointmentId'];
             $data['serviceId'] = $params['serviceId'];
             $data['modified'] = date('Y-m-d H:i:s');
             $data['disabled'] = 1;
-
+    
             $appointmentService->delete($data);
-
+    
             echo json_encode(array(
                 'success' => true,
                 'message' => 'Appointment service successfully deactivated'
+            ));
+    
+        }
+        catch(Exception $e) {
+
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
             ));
 
         }
 
     }
+
+}
 
 ?>

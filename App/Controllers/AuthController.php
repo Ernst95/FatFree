@@ -1,10 +1,12 @@
 <?php
 
-    class AuthController extends Controller {
+class AuthController extends Controller {
 
-        function authenticate($f3, $params) {
+    function authenticate($f3, $params) {
 
-            header('Content-type:application/json');
+        header('Content-type:application/json');
+
+        try {
 
             $data = json_decode($f3->get('BODY'), true);
 
@@ -24,7 +26,7 @@
             }
 
             if(md5($data['password']) == $result['password']) {
-               
+                
                 $userToken = new UserToken($this->db);
 
                 $data['password'] = '';
@@ -54,7 +56,17 @@
             }
 
         }
+        catch(Exception $e) {
+
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
+
+        }      
 
     }
+
+}
 
 ?>

@@ -1,8 +1,11 @@
 <?php
 
-    class ServiceController extends Controller {
+class ServiceController extends Controller {
 
-        function beforeroute() {
+    function beforeroute() {
+
+        //Check to make sure token passed is valid
+        try {
 
             $userToken = new UserToken($this->db);
 
@@ -15,10 +18,26 @@
             }
 
         }
-
-        function getAll($f3, $params) {
+        catch(Exception $e) {
 
             header('Content-type:application/json');
+
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
+            
+            exit;
+
+        }
+
+    }
+
+    function getAll($f3, $params) {
+
+        header('Content-type:application/json');
+
+        try {
 
             $disabled = $params['disabled'];
 
@@ -44,10 +63,22 @@
             ));
 
         }
+        catch(Exception $e) {
 
-        function getById($f3, $params) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
 
-            header('Content-type:application/json');
+        }
+
+    }
+
+    function getById($f3, $params) {
+
+        header('Content-type:application/json');
+
+        try {
 
             $id = $params['id'];
 
@@ -83,10 +114,22 @@
             ));
 
         }
+        catch(Exception $e) {
 
-        function getService($f3, $params) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
 
-            header('Content-type:application/json');
+        }            
+
+    }
+
+    function getService($f3, $params) {
+
+        header('Content-type:application/json');
+
+        try {
 
             $name = $params['name'];
 
@@ -122,11 +165,23 @@
             ));
 
         }
+        catch(Exception $e) {
 
-        function create($f3, $params) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
 
-            header('Content-type:application/json');
-    
+        }            
+
+    }
+
+    function create($f3, $params) {
+
+        header('Content-type:application/json');
+
+        try {
+
             $data = json_decode($f3->get('BODY'), true);
 
             $name = $params['name'];
@@ -198,15 +253,27 @@
                 ));
     
             }
-            
+
         }
+        catch(Exception $e) {
 
-        function delete($f3, $params) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
 
-            header('Content-type:application/json');
-    
+        }  
+            
+    }
+
+    function delete($f3, $params) {
+
+        header('Content-type:application/json');
+        
+        try {
+
             $name = $params['name'];
-    
+
             if(empty($name)) {
     
                 echo json_encode(array(
@@ -243,9 +310,19 @@
                 'success' => true,
                 'message' => 'Service successfully deleted'
             ));
-    
-        }
 
+        }
+        catch(Exception $e) {
+
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
+
+        } 
+            
     }
+
+}
 
 ?>
