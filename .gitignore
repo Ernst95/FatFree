@@ -2,3 +2,4 @@
 composer.lock
 /.vscode
 /tmp
+.phpunit.result.cache
