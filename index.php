@@ -6,23 +6,23 @@ $f3 = Base::instance();
 
 date_default_timezone_set("Africa/Johannesburg");
 
-$f3->config('app/config/routes/routes.ini');
+$f3->config('App/Config/routes/routes.ini');
 
-$f3->config('app/config/environment.ini');
+$f3->config('App/Config/environment.ini');
 
 if($f3->get('env') == "dev") {
 
-    $f3->config('app/config/dev/setup.ini');
+    $f3->config('App/Config/dev/setup.ini');
 
-    $f3->config('app/config/dev/mysql.ini');
+    $f3->config('App/Config/dev/mysql.ini');
 
 }
 
 if($f3->get('env') == "prod"){
 
-    $f3->config('app/config/prod/setup.ini');
+    $f3->config('App/Config/prod/setup.ini');
 
-    $f3->config('app/config/prod/mysql.ini');
+    $f3->config('App/Config/prod/mysql.ini');
 
 }
  
