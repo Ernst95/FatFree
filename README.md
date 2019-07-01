@@ -14,9 +14,12 @@ Learning Fat-Free Framework
     </Directory>
 </VirtualHost>
 
+#PHP version
+    1. Make sure you are using PHP version 7
+
 #Composer
-composer install
+    1. composer install
 
-
-
-
+#Populate tables
+    1. First create a database called "salon"
+    2. Execute the populateDB.php file in the cmd to populate the database with data
