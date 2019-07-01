@@ -9,8 +9,5 @@
       "name": "Ernst95",
       "email": "test@gmail.com"
     }
-  ],
-  "require-dev": {
-    "phpunit/phpunit": "^8"
-  }
+  ]
 }
