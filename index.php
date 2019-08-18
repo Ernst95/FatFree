@@ -25,6 +25,15 @@ if($f3->get('env') == "prod"){
     $f3->config('app/config/prod/mysql.ini');
 
 }
+
+$f3->set('ONERROR', 
+    function($f3) {
+        echo json_encode(array(
+            'success' => false,
+            'message' => $f3->get('ERROR.text')
+        ));
+    }
+);
  
 $f3->run();
 
