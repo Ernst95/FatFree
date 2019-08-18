@@ -14,7 +14,7 @@ class ServiceController extends Controller {
             $result = $userToken->verifyToken($token);
 
             if(empty($result) || $result['expiryDate'] < date('Y-m-d H:i:s')) {
-                $this->f3->error(403);
+                $this->f3->error(403, 'Invalid token');
             }
 
         }
@@ -43,12 +43,9 @@ class ServiceController extends Controller {
 
             if($disabled < 0) {
 
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Missing one or more required fields'
-                ));
+                $f3->error(400, 'Missing one or more required fields');
 
-                return;
+                exit;
 
             }
 
@@ -56,11 +53,9 @@ class ServiceController extends Controller {
 
             $result = $service->getAll($disabled);
 
-            echo json_encode(array(
-                'success' => true,
-                'count' => count($result),
-                'results' => $result
-            ));
+            Response::successResponse($result);
+
+            exit;
 
         }
         catch(Exception $e) {
@@ -69,6 +64,8 @@ class ServiceController extends Controller {
                 'success' => false,
                 'message' => $e->getMessage()
             ));
+
+            exit;
 
         }
 
@@ -84,12 +81,10 @@ class ServiceController extends Controller {
 
             if(empty($id)) {
 
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Missing one or more required fields'
-                ));
+                $f3->error(400, 'Missing one or more required fields');
 
-                return;
+                exit;
+
             }
 
             $service = new Service($this->db);
@@ -97,21 +92,16 @@ class ServiceController extends Controller {
             $result = $service->getById($id);
 
             if(empty($result)) {
-                
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Service id does not exist'
-                ));
-    
-                return;
+
+                $f3->error(400, 'Service id does not exist');
+
+                exit;
     
             }
 
-            echo json_encode(array(
-                'success' => true,
-                'count' => count($result),
-                'results' => $result
-            ));
+            Response::successResponse($result);
+
+            exit;
 
         }
         catch(Exception $e) {
@@ -120,6 +110,8 @@ class ServiceController extends Controller {
                 'success' => false,
                 'message' => $e->getMessage()
             ));
+
+            exit;
 
         }            
 
@@ -135,12 +127,10 @@ class ServiceController extends Controller {
 
             if(empty($name)) {
 
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Missing one or more required fields'
-                ));
+                $f3->error(400, 'Missing one or more required fields');
 
-                return;
+                exit;
+
             }
 
             $service = new Service($this->db);
@@ -149,20 +139,15 @@ class ServiceController extends Controller {
 
             if(empty($result)) {
                 
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Service name does not exist'
-                ));
-    
-                return;
+                $f3->error(400, 'Service name does not exist');
+
+                exit;
     
             }
 
-            echo json_encode(array(
-                'success' => true,
-                'count' => count($result),
-                'results' => $result
-            ));
+            Response::successResponse($result);
+
+            exit;
 
         }
         catch(Exception $e) {
@@ -171,6 +156,8 @@ class ServiceController extends Controller {
                 'success' => false,
                 'message' => $e->getMessage()
             ));
+
+            exit;
 
         }            
 
@@ -188,12 +175,9 @@ class ServiceController extends Controller {
     
             if(empty($data['name']) || empty($data['price'])) {
     
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Missing one or more required fields'
-                ));
-    
-                return;
+                $f3->error(400, 'Missing one or more required fields');
+
+                exit;
     
             }
 
@@ -205,12 +189,9 @@ class ServiceController extends Controller {
     
                 if(empty($result)) {
                 
-                    echo json_encode(array(
-                        'success' => false,
-                        'message' => 'Service name does not exist'
-                    ));
-        
-                    return;
+                    $f3->error(400, 'Service name does not exist');
+
+                    exit;
         
                 }
 
@@ -218,13 +199,10 @@ class ServiceController extends Controller {
                 $data['modified'] = date('Y-m-d H:i:s');
         
                 $service->create($data);
+
+                Response::successMessage('Service successfully updated');
     
-                echo json_encode(array(
-                    'success' => true,
-                    'message' => 'Service successfully updated'
-                ));
-    
-                return;
+                exit;
     
             }
             else {
@@ -233,12 +211,9 @@ class ServiceController extends Controller {
     
                 if(!empty($result)) {
                 
-                    echo json_encode(array(
-                        'success' => false,
-                        'message' => 'Service name already exist'
-                    ));
-        
-                    return;
+                    $f3->error(400, 'Service name already exists');
+
+                    exit;
         
                 }
     
@@ -247,10 +222,9 @@ class ServiceController extends Controller {
     
                 $service->create($data);
     
-                echo json_encode(array(
-                    'success' => true,
-                    'message' => 'Service successfully created'
-                ));
+                Response::successMessage('Service successfully created');
+
+                exit;
     
             }
 
@@ -261,6 +235,8 @@ class ServiceController extends Controller {
                 'success' => false,
                 'message' => $e->getMessage()
             ));
+
+            exit;
 
         }  
             
@@ -276,12 +252,9 @@ class ServiceController extends Controller {
 
             if(empty($name)) {
     
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Missing one or more required fields'
-                ));
-                
-                return;
+                $f3->error(400, 'Missing one or more required fields');
+
+                exit;
             
             }
     
@@ -291,12 +264,9 @@ class ServiceController extends Controller {
     
             if(empty($result)) {
     
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Service name does not exist'
-                ));
-    
-                return;
+                $f3->error(400, 'Service name does not exist');
+
+                exit;
     
             }
     
@@ -306,10 +276,9 @@ class ServiceController extends Controller {
     
             $service->delete($data);
     
-            echo json_encode(array(
-                'success' => true,
-                'message' => 'Service successfully deleted'
-            ));
+            Response::successMessage('Service successfully deleted');
+
+            exit;
 
         }
         catch(Exception $e) {
@@ -318,6 +287,8 @@ class ServiceController extends Controller {
                 'success' => false,
                 'message' => $e->getMessage()
             ));
+
+            exit;
 
         } 
             

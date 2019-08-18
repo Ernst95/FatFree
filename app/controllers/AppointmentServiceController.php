@@ -14,7 +14,7 @@ class AppointmentServiceController extends Controller {
             $result = $userToken->verifyToken($token);
 
             if(empty($result) || $result['expiryDate'] < date('Y-m-d H:i:s')) {
-                $this->f3->error(403);
+                $this->f3->error(403, 'Invalid token');
             }
 
         }
@@ -45,22 +45,17 @@ class AppointmentServiceController extends Controller {
 
             if($disabled < 0) {
 
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Missing one or more required fields'
-                ));
+                $f3->error(400, 'Missing one or more required fields');
 
-                return;
+                exit;
 
             }
 
             $result = $appointmentService->getAll($disabled);
 
-            echo json_encode(array(
-                'success' => true,
-                'count' => count($result),
-                'results' => $result
-            )); 
+            Response::successResponse($result);
+
+            exit;
 
         }
         catch(Exception $e) {
@@ -69,6 +64,8 @@ class AppointmentServiceController extends Controller {
                 'success' => false,
                 'message' => $e->getMessage()
             ));
+
+            exit;
 
         } 
 
@@ -82,12 +79,9 @@ class AppointmentServiceController extends Controller {
                 
             if(empty($params['appointmentId']) || empty($params['serviceId'])) {
 
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Missing one or more required fields'
-                ));
+                $f3->error(400, 'Missing one or more required fields');
 
-                return;
+                exit;
 
             }
 
@@ -95,11 +89,9 @@ class AppointmentServiceController extends Controller {
 
             $result = $appointmentService->getById($params['appointmentId'], $params['serviceId']);
 
-            echo json_encode(array(
-                'success' => true,
-                'count' => count($result),
-                'results' => $result
-            ));
+            Response::successResponse($result);
+
+            exit;
 
         }
         catch(Exception $e) {
@@ -108,6 +100,8 @@ class AppointmentServiceController extends Controller {
                 'success' => false,
                 'message' => $e->getMessage()
             ));
+
+            exit;
 
         }                       
 
@@ -121,12 +115,9 @@ class AppointmentServiceController extends Controller {
 
             if(empty($params['appointmentId'])) {
 
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Missing one or more required fields'
-                ));
-    
-                return;
+                $f3->error(400, 'Missing one or more required fields');
+
+                exit;
     
             }
     
@@ -134,11 +125,9 @@ class AppointmentServiceController extends Controller {
     
             $result = $appointmentService->getAppointmentById($params['appointmentId']);
     
-            echo json_encode(array(
-                'success' => true,
-                'count' => count($result),
-                'results' => $result
-            ));    
+            Response::successResponse($result);   
+
+            exit;
 
         }
         catch(Exception $e) {
@@ -147,6 +136,8 @@ class AppointmentServiceController extends Controller {
                 'success' => false,
                 'message' => $e->getMessage()
             ));
+
+            exit;
 
         } 
 
@@ -170,26 +161,20 @@ class AppointmentServiceController extends Controller {
             if(empty($params['appointmentId']) && empty($params['serviceId'])) {
 
                 if(empty($data['appointmentId']) || empty($data['serviceId']) || empty($data['quantity'])) {
+                    
+                    $f3->error(400, 'Missing one or more required fields');
 
-                    echo json_encode(array(
-                        'success' => false,
-                        'message' => 'Missing one or more required fields'
-                    ));
-        
-                    return;
+                    exit;
         
                 }
                 
                 $result = $appointment->getById($data['appointmentId'])[0];
         
                 if(empty($result)) {
-                
-                    echo json_encode(array(
-                        'success' => false,
-                        'message' => 'Appointment does not exist'
-                    ));
-        
-                    return;
+
+                    $f3->error(400, 'Appointment does not exist');
+
+                    exit;
         
                 }
 
@@ -197,12 +182,9 @@ class AppointmentServiceController extends Controller {
         
                 if(empty($result)) {
                 
-                    echo json_encode(array(
-                        'success' => false,
-                        'message' => 'Service does not exist'
-                    ));
-        
-                    return;
+                    $f3->error(400, 'Service does not exist');
+
+                    exit;
         
                 }
 
@@ -211,22 +193,18 @@ class AppointmentServiceController extends Controller {
 
                 $appointmentService->create($data);
 
-                echo json_encode(array(
-                    'success' => true,
-                    'message' => 'Appointment service successfully created'
-                ));
+                Response::successMessage('Appointment service successfully created');
+
+                exit;
 
             }
             else {
 
                 if(empty($params['appointmentId']) || empty($params['serviceId'])) {
 
-                    echo json_encode(array(
-                        'success' => false,
-                        'message' => 'Missing one or more required fields'
-                    ));
+                    $f3->error(400, 'Missing one or more required fields');
 
-                    return;
+                    exit;
 
                 }
         
@@ -234,12 +212,9 @@ class AppointmentServiceController extends Controller {
 
                 if(empty($result)) {
                 
-                    echo json_encode(array(
-                        'success' => false,
-                        'message' => 'Appointment service does not exist'
-                    ));
-        
-                    return;
+                    $f3->error(400, 'Appointment does not exist');
+
+                    exit;
         
                 }
 
@@ -249,12 +224,9 @@ class AppointmentServiceController extends Controller {
         
                 $appointmentService->create($data);
 
-                echo json_encode(array(
-                    'success' => true,
-                    'message' => 'Appointment service successfully updated'
-                ));
+                Response::successMessage('Appointment service successfully updated');
 
-                return;
+                exit;
             
             }
 
@@ -265,6 +237,8 @@ class AppointmentServiceController extends Controller {
                 'success' => false,
                 'message' => $e->getMessage()
             ));
+
+            exit;
 
         }
         
@@ -278,12 +252,9 @@ class AppointmentServiceController extends Controller {
             
             if(empty($params['appointmentId']) || empty($params['serviceId'])) {
 
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Missing one or more required fields'
-                ));
-    
-                return;
+                $f3->error(400, 'Missing one or more required fields');
+
+                exit;
     
             }
     
@@ -293,12 +264,9 @@ class AppointmentServiceController extends Controller {
     
             if(empty($result)) {
     
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Appointment service does not exist'
-                ));
-    
-                return;
+                $f3->error(400, 'Appointment does not exist');
+
+                exit;
     
             }
     
@@ -308,11 +276,10 @@ class AppointmentServiceController extends Controller {
             $data['disabled'] = 1;
     
             $appointmentService->delete($data);
-    
-            echo json_encode(array(
-                'success' => true,
-                'message' => 'Appointment service successfully deactivated'
-            ));
+            
+            Response::successMessage('Appointment service successfully deactivated');
+
+            exit;
     
         }
         catch(Exception $e) {
@@ -321,6 +288,8 @@ class AppointmentServiceController extends Controller {
                 'success' => false,
                 'message' => $e->getMessage()
             ));
+
+            exit;
 
         }
 

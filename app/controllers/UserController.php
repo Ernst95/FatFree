@@ -14,7 +14,7 @@ class UserController extends Controller {
             $result = $userToken->verifyToken($token);
     
             if(empty($result) || $result['expiryDate'] < date('Y-m-d H:i:s')) {
-                $this->f3->error(403);
+                $this->f3->error(403, 'Invalid token');
             }
 
         }
@@ -43,12 +43,9 @@ class UserController extends Controller {
 
             if($disabled < 0) {
 
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Missing one or more required fields'
-                ));
+                $f3->error(400, 'Missing one or more required fields');
 
-                return;
+                exit;
 
             }
 
@@ -56,11 +53,9 @@ class UserController extends Controller {
 
             $result = $user->getAll($disabled);
 
-            echo json_encode(array(
-                'success' => true,
-                'count' => count($result),
-                'results' => $result
-            ));
+            Response::successResponse($result);
+
+            exit;
 
         }
         catch(Exception $e) {
@@ -69,6 +64,8 @@ class UserController extends Controller {
                 'success' => false,
                 'message' => $e->getMessage()
             ));
+
+            exit;
 
         }        
 
@@ -84,12 +81,9 @@ class UserController extends Controller {
 
             if(empty($userId)) {
 
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Missing one or more required fields'
-                ));
+                $f3->error(400, 'Missing one or more required fields');
 
-                return;
+                exit;
 
             }
 
@@ -97,11 +91,9 @@ class UserController extends Controller {
 
             $result = $user->getById($userId);
 
-            echo json_encode(array(
-                'success' => true,
-                'count' => count($result),
-                'results' => $result
-            ));
+            Response::successResponse($result);
+
+            exit;
 
         }
         catch(Exception $e) {
@@ -110,6 +102,8 @@ class UserController extends Controller {
                 'success' => false,
                 'message' => $e->getMessage()
             ));
+
+            exit;
 
         }
 
@@ -131,45 +125,35 @@ class UserController extends Controller {
                 
                 if(!empty($result)) {
         
-                    echo json_encode(array(
-                        'success' => false,
-                        'message' => 'Email already exist'
-                    ));
-        
-                    return;
+                    $f3->error(400, 'Email already exist');
+
+                    exit;
+
                 }
         
                 $result = $user->getByMobileNumber($data['mobileNumber']);
                 
                 if(!empty($result)) {
         
-                    echo json_encode(array(
-                        'success' => false,
-                        'message' => 'Mobile number already exist'
-                    ));
-        
-                    return;
+                    $f3->error(400, 'Email already exist');
+
+                    exit;
+
                 }
 
                 if(empty($data['title']) || empty($data['firstName']) || empty($data['lastName']) || empty($data['dateOfBirth']) || empty($data['gender']) || empty($data['mobileNumber']) || empty($data['telephoneNumber']) || empty($data['email']) || empty($data['userGroupId'])) {
 
-                    echo json_encode(array(
-                        'success' => false,
-                        'message' => 'Missing one or more required fields'
-                    ));
+                    $f3->error(400, 'Missing one or more required fields');
 
-                    return;
+                    exit;
 
                 }
 
                 if(($data['userGroupId'] == 2 || $data['userGroupId'] == 3) && empty($data['password'])) {
 
-                    echo json_encode(array(
-                        'success' => false,
-                        'message' => 'Missing password field'
-                    ));
+                    $f3->error(400, 'Missing password field');
 
-                    return;
+                    exit;
 
                 }
 
@@ -187,10 +171,9 @@ class UserController extends Controller {
 
                 $user->create($data);
 
-                echo json_encode(array(
-                    'success' => true,
-                    'userId' => $data['userId']
-                ));
+                Response::successResponse(array('userId' => $data['userId']));
+
+                exit;
 
             }
             else {
@@ -200,13 +183,10 @@ class UserController extends Controller {
                 $result = $user->getById($data['userId']);
 
                 if(empty($result)) {
-                
-                    echo json_encode(array(
-                        'success' => false,
-                        'message' => 'User does not exist'
-                    ));
         
-                    return;
+                    $f3->error(400, 'User does not exist');
+
+                    exit;
         
                 }
 
@@ -214,34 +194,29 @@ class UserController extends Controller {
                 
                 if(!empty($result) && ($result['userId'] != $params['userId'])) {
         
-                    echo json_encode(array(
-                        'success' => false,
-                        'message' => 'Email already exist'
-                    ));
-        
-                    return;
+                    $f3->error(400, 'Email already exist');
+
+                    exit;
+
                 }
         
                 $result = $user->getByMobileNumber($data['mobileNumber'])[0];
                 
                 if(!empty($result) && ($result['userId'] != $params['userId'])) {
         
-                    echo json_encode(array(
-                        'success' => false,
-                        'message' => 'Mobile number already exist'
-                    ));
-        
-                    return;
+                    $f3->error(400, 'Mobile number already exist');
+
+                    exit;
+
                 }
 
                 unset($data['password']);
 
                 $user->create($data);
 
-                echo json_encode(array(
-                    'success' => true,
-                    'message' => 'User successfully updated'
-                ));
+                Response::successMessage('User successfully updated');
+
+                exit;
 
             }
 
@@ -267,12 +242,9 @@ class UserController extends Controller {
 
             if(empty($userId)) {
 
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Missing one or more required fields'
-                ));
-                
-                return;
+                $f3->error(400, 'Missing one or more required fields');
+
+                exit;
             
             }
 
@@ -282,12 +254,9 @@ class UserController extends Controller {
 
             if(empty($result)) {
 
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'User does not exist'
-                ));
+                $f3->error(400, 'User does not exist');
 
-                return;
+                exit;
 
             }
 
@@ -297,10 +266,9 @@ class UserController extends Controller {
 
             $user->delete($data);
 
-            echo json_encode(array(
-                'success' => true,
-                'message' => 'User successfully deactivated'
-            ));
+            Response::successMessage('User successfully deleted');
+
+            exit;
 
         }
         catch(Exception $e) {

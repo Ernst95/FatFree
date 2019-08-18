@@ -16,12 +16,9 @@ class AuthController extends Controller {
 
             if($result['disabled'] == 1 || $result['userGroupId'] == 1 || count($result) <= 0) {
 
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Incorrect username or password'
-                ));
+                $f3->error(401, 'Incorrect username or password');
 
-                return;
+                exit;
 
             }
 
@@ -36,22 +33,16 @@ class AuthController extends Controller {
 
                 $token['token'] = $userToken->generateToken($data);
 
-                echo json_encode(array(
-                    'success' => true,
-                    'result' => $token
-                ));
+                Response::successResponse($token);
 
-                return;
+                exit;
 
             }
             else {
 
-                echo json_encode(array(
-                    'success' => false,
-                    'message' => 'Incorrect username or password'
-                ));
+                $f3->error(401, 'Incorrect username or password');
 
-                return;
+                exit;
             
             }
 
@@ -62,6 +53,8 @@ class AuthController extends Controller {
                 'success' => false,
                 'message' => $e->getMessage()
             ));
+
+            exit;
 
         }      
 
