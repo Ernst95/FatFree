@@ -214,7 +214,7 @@ class UserController extends Controller {
 
                 $user->create($data);
 
-                Response::successMessage('User successfully updated');
+                Response::successResponse(array('userId' => $data['userId']));
 
                 exit;
 
