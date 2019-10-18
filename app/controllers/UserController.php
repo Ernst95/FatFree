@@ -282,6 +282,44 @@ class UserController extends Controller {
 
     }
 
+    function getByUserGroupId($f3, $params) {
+
+        header('Content-type:application/json');
+
+        try {
+
+            $userGroupId = $params['userGroupId'];
+
+            if(empty($userGroupId)) {
+                $f3->error(400, 'Missing one or more required fields');
+                exit;
+            }
+
+            $user = new User($this->db);
+
+            $result = $user->getByUserGroupId($userGroupId);
+
+            if(empty($result)) {
+                $f3->error(400, 'User Group Id does not exist');
+                exit;
+            }
+
+            Response::successResponse($result);
+
+            exit;
+
+        }
+        catch(Exception $e) {
+
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
+
+        }
+
+    }
+
 }
 
 ?>
