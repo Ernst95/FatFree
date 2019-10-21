@@ -32,6 +32,8 @@ class AuthController extends Controller {
                 $data['disabled'] = 0;
 
                 $token['token'] = $userToken->generateToken($data);
+                $token['firstName'] = $result['firstName'];
+                $token['lastName'] = $result['lastName'];
 
                 Response::successResponse($token);
 
