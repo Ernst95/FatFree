@@ -82,11 +82,34 @@ class User extends DB\SQL\Mapper{
     
     }
 
-    public function getByUserGroupId($userGroupId) {
+    public function getByUserGroupId($userGroupId, $limit, $page) {
 
         try {
 
-            $query = "SELECT * FROM user WHERE userGroupId = '$userGroupId' AND disabled = 0";
+            $query = "SELECT * FROM user WHERE userGroupId = '$userGroupId' AND disabled = 0 order by userId";
+
+            $result = $this->db->exec($query);
+
+            $pages = ceil(count($result) / $limit);
+
+            $offset = ($page - 1) * $limit;
+
+            $query = 
+            "
+                SELECT 
+                    * 
+                FROM 
+                    user 
+                WHERE 
+                    userGroupId = '$userGroupId' AND 
+                    disabled = 0
+                ORDER BY
+                    userId
+                LIMIT
+                    {$limit}
+                OFFSET
+                    {$offset}
+            ";
 
             $result = $this->db->exec($query);
     

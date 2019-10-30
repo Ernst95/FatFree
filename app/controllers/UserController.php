@@ -289,6 +289,8 @@ class UserController extends Controller {
         try {
 
             $userGroupId = $params['userGroupId'];
+            $limit = $f3->get('GET.limit') ? $f3->get('GET.limit') : 999999;
+            $page = $f3->get('GET.page') ? $f3->get('GET.page') : 1;
 
             if(empty($userGroupId)) {
                 $f3->error(400, 'Missing one or more required fields');
@@ -297,7 +299,7 @@ class UserController extends Controller {
 
             $user = new User($this->db);
 
-            $result = $user->getByUserGroupId($userGroupId);
+            $result = $user->getByUserGroupId($userGroupId, $limit, $page);
 
             if(empty($result)) {
                 $f3->error(400, 'User Group Id does not exist');
