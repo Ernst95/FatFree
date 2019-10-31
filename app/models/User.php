@@ -113,7 +113,7 @@ class User extends DB\SQL\Mapper{
 
             $result = $this->db->exec($query);
     
-            return $result;
+            return array('records' => $result, 'pages' => $pages);
 
         }
         catch(Exception $e) {

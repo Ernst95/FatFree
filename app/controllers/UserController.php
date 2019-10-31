@@ -306,7 +306,7 @@ class UserController extends Controller {
                 exit;
             }
 
-            Response::successResponse($result);
+            Response::successResponseWithPageTotal($result['records'], $result['pages']);
 
             exit;
 
