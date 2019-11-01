@@ -21,17 +21,6 @@
 
         }
 
-        public static function successResponseWithPageCount($records, $pages) {
-
-            echo json_encode(array(
-                'success' => true,
-                'count' => count($records),
-                'pages' => $pages,
-                'records' => $records
-            ));
-
-        }
-
     }
 
 ?>
