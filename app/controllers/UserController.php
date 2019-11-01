@@ -306,7 +306,13 @@ class UserController extends Controller {
                 exit;
             }
 
-            Response::successResponseWithPageTotal($result['records'], $result['pages']);
+            echo json_encode(array(
+                'success' => true,
+                'count' => count($result['records']),
+                'pages' => $result['pages'],
+                'currentPage' => $result['currentPage'],
+                'records' => $result['records']
+            ));
 
             exit;
 

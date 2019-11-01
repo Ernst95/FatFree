@@ -92,6 +92,10 @@ class User extends DB\SQL\Mapper{
 
             $pages = ceil(count($result) / $limit);
 
+            if($page > $pages) {
+                $page = 1;
+            }
+
             $offset = ($page - 1) * $limit;
 
             $query = 
@@ -113,7 +117,7 @@ class User extends DB\SQL\Mapper{
 
             $result = $this->db->exec($query);
     
-            return array('records' => $result, 'pages' => $pages);
+            return array('records' => $result, 'pages' => $pages, 'currentPage' => $page);
 
         }
         catch(Exception $e) {
