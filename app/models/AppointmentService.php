@@ -10,7 +10,7 @@
 
             try {
 
-                $query = "SELECT * FROM appointment_service WHERE disabled = $disabled";
+                $query = "SELECT * FROM appointment_service WHERE disabled = $disabled GROUP BY appointmentId";
 
                 $result = $this->db->exec($query);
     
@@ -50,7 +50,7 @@
 
                 $query = "SELECT * FROM appointment_service WHERE appointmentId = $appointmentId AND disabled = 0";
 
-                $this->db->exec($query);
+                $result = $this->db->exec($query);
     
                 return $result;
 
@@ -92,6 +92,27 @@
     
                 $this->save();
                 
+            }
+            catch(Exception $e) {
+
+                throw new Exception($e);
+
+            }
+
+        }
+
+        public function getAppointmentByYearAndMonthByUserId($userId, $year, $month) {
+
+            try {
+
+                $query = "SELECT *, DATE_FORMAT(date, '%Y') AS year, DATE_FORMAT(date, '%m') AS month, DATE_FORMAT(date, '%e') AS day FROM appointment WHERE empUserId = '$userId' AND disabled = 0 AND YEAR(date) = $year AND MONTH(date) = $month ORDER BY date";
+
+                error_log($query);
+
+                $result = $this->db->exec($query);
+    
+                return $result;
+
             }
             catch(Exception $e) {
 
