@@ -404,7 +404,15 @@ class AppointmentServiceController extends Controller {
 
             $result = $appointmentService->getAppointmentByYearAndMonthByUserId($params['userId'], $params['year'], $params['month']);
 
-            Response::successResponse($result);
+            for($i=1; $i <= 31; $i++) {
+                $records[$i] = array();
+            }
+
+            foreach($result as $value) {
+                array_push($records[(int)$value['day']], $value);
+            }
+
+            Response::successResponse($records);
 
             exit;
 

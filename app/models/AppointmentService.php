@@ -105,9 +105,31 @@
 
             try {
 
-                $query = "SELECT *, DATE_FORMAT(date, '%Y') AS year, DATE_FORMAT(date, '%m') AS month, DATE_FORMAT(date, '%e') AS day FROM appointment WHERE empUserId = '$userId' AND disabled = 0 AND YEAR(date) = $year AND MONTH(date) = $month ORDER BY date";
-
-                error_log($query);
+                $query = "
+                SELECT
+                    u.title,
+                    u.firstName,
+                    u.lastName,
+                    u.mobileNumber,
+                    u.email,
+                    ap.date,
+                    ap.custUserId,
+                    ap.empUserId,
+                    DATE_FORMAT(ap.date, '%Y') AS year,
+                    DATE_FORMAT(ap.date, '%m') AS month,
+                    DATE_FORMAT(ap.date, '%e') AS day
+                FROM 
+                    appointment ap
+                LEFT JOIN user u ON
+                    u.userId = ap.custUserId
+                WHERE
+                    ap.empUserId = '$userId' AND
+                    ap.disabled = 0 AND
+                    YEAR(ap.date) = $year AND
+                    MONTH(ap.date) = $month
+                ORDER BY
+                    ap.date
+                ";
 
                 $result = $this->db->exec($query);
     
