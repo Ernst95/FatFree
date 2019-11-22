@@ -62,6 +62,38 @@ class AuthController extends Controller {
 
     }
 
+    function verifyToken($f3, $params) {
+
+        header('Content-type: application/json');
+
+        try {
+
+            $data = json_decode($f3->get('BODY'), true);
+
+            $userToken = new UserToken($this->db);
+
+            $token = $userToken->verifyToken($data['token']);
+
+            if(empty($token['id'])) {
+                echo json_encode(array(
+                    'success' => false,
+                    'message' => ''
+                ));
+            }
+            else {
+                Response::successMessage('');
+            }            
+
+        }
+        catch(Exception $e) {
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
+            exit;
+        }   
+    }
+
 }
 
 ?>
