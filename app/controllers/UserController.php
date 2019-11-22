@@ -91,6 +91,11 @@ class UserController extends Controller {
 
             $result = $user->getById($userId);
 
+            if(empty($result)) {
+                $f3->error(400, 'User does not exist');
+                exit;
+            }
+
             Response::successResponse($result);
 
             exit;
