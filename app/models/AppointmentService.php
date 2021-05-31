@@ -144,6 +144,58 @@
 
         }
 
+        public function getAppointmentByDayByUserId($userId, $year, $month, $day) {
+
+            try {
+
+                $query = "
+                SELECT
+                    aps.appointmentId,
+                    ap.date appointmentDate,
+                    ap.custUserId,
+                    ap.empUserId,
+                    DATE_FORMAT(ap.date, '%Y') AS year,
+                    DATE_FORMAT(ap.date, '%m') AS month,
+                    DATE_FORMAT(ap.date, '%e') AS day,
+                    aps.serviceId,
+                    s.name AS serviceName,
+                    s.price AS servicePrice,
+                    u.title,
+                    u.firstName,
+                    u.lastName,
+                    u.mobileNumber,
+                    u.email
+                FROM 
+                    appointment ap
+                LEFT JOIN appointment_service aps ON
+                    aps.appointmentId = ap.id
+                LEFT JOIN service s ON
+                    s.id = aps.serviceId
+                LEFT JOIN user u ON
+                    u.userId = ap.custUserId
+                WHERE
+                    ap.empUserId = '$userId' AND
+                    ap.disabled = 0 AND
+                    YEAR(ap.date) = $year AND
+                    MONTH(ap.date) = $month AND
+                    DAY(ap.date) = $day
+                ORDER BY
+                    ap.date
+                ";
+
+                $result = $this->db->exec($query);
+    
+                return $result;
+
+            }
+            catch(Exception $e) {
+
+                throw new Exception($e);
+
+            }
+
+        }
+
     }
 
 ?>

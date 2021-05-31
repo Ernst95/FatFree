@@ -153,6 +153,7 @@ class AppointmentController extends Controller {
     
                 $data['created'] = date('Y-m-d H:i:s');
                 $data['disabled'] = 0;
+                $data['status'] = 'p';
     
                 $appointment->create($data);
     
@@ -231,6 +232,7 @@ class AppointmentController extends Controller {
             $data['modified'] = date('Y-m-d H:i:s');
             $data['id'] = $id;
             $data['disabled'] = 1;
+            $data['status'] = 'x';
     
             $appointment->delete($data);
 

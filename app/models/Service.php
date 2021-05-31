@@ -6,6 +6,25 @@
             parent::__construct($db, 'service');
         }
 
+        public function getAllRecords() {
+
+            try {
+ 
+                $query = "SELECT * FROM service WHERE disabled = 0";
+        
+                $result = $this->db->exec($query);
+        
+                return $result;
+
+            }
+            catch(Exception $e) {
+
+                throw new Exception($e);
+
+            }
+        
+        }
+
         public function getAll($disabled) {
 
             try {
@@ -67,7 +86,7 @@
 
             try {
 
-                $this->load(array('name = ?', $data['name']));
+                $this->load(array('id = ?', $data['id']));
 
                 $this->copyFrom($data);
     
@@ -86,7 +105,7 @@
 
             try {
 
-                $this->load(array('name = ?', $data['name']));
+                $this->load(array('id = ?', $data['id']));
 
                 $this->copyFrom($data);
     

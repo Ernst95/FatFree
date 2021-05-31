@@ -5,7 +5,7 @@ class ServiceController extends Controller {
     function beforeroute() {
 
         //Check to make sure token passed is valid
-        try {
+       /* try {
 
             $userToken = new UserToken($this->db);
 
@@ -27,6 +27,44 @@ class ServiceController extends Controller {
                 'message' => $e->getMessage()
             ));
             
+            exit;
+
+        }*/
+
+    }
+
+    function getAllRecords($f3, $params) {
+
+        header('Content-type:application/json');
+
+        try {
+
+            // $disabled = $params['disabled'];
+
+            // if($disabled < 0) {
+
+            //     $f3->error(400, 'Missing one or more required fields');
+
+            //     exit;
+
+            // }
+
+            $service = new Service($this->db);
+
+            $result = $service->getAllRecords();
+
+            Response::successResponse($result);
+
+            exit;
+
+        }
+        catch(Exception $e) {
+
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
+
             exit;
 
         }
@@ -163,6 +201,59 @@ class ServiceController extends Controller {
 
     }
 
+    function update($f3, $params) {
+
+        header('Content-type:application/json');
+
+        try {
+
+            $data = json_decode($f3->get('BODY'), true);
+
+            $id = $params['id'];
+    
+            if(empty($data['name']) || empty($data['price'])) {
+    
+                $f3->error(400, 'Missing one or more required fields');
+
+                exit;
+    
+            }
+
+            $service = new Service($this->db);
+            
+            $result = $service->getById($id);
+
+            if(empty($result)) {
+            
+                $f3->error(400, 'Service ID does not exist');
+
+                exit;
+    
+            }
+
+            $data['id'] = $id;
+            $data['modified'] = date('Y-m-d H:i:s');
+    
+            $service->create($data);
+
+            Response::successMessage('Service successfully updated');
+
+            exit;
+
+        }
+        catch(Exception $e) {
+
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
+
+            exit;
+
+        }  
+            
+    }
+
     function create($f3, $params) {
 
         header('Content-type:application/json');
@@ -248,9 +339,9 @@ class ServiceController extends Controller {
         
         try {
 
-            $name = $params['name'];
+            $id = $params['id'];
 
-            if(empty($name)) {
+            if(empty($id)) {
     
                 $f3->error(400, 'Missing one or more required fields');
 
@@ -260,7 +351,7 @@ class ServiceController extends Controller {
     
             $service = new Service($this->db);
     
-            $result = $service->getByName($name);
+            $result = $service->getById($id);
     
             if(empty($result)) {
     
@@ -271,7 +362,7 @@ class ServiceController extends Controller {
             }
     
             $data['modified'] = date('Y-m-d H:i:s');
-            $data['name'] = $name;
+            $data['id'] = $id;
             $data['disabled'] = 1;
     
             $service->delete($data);
@@ -282,14 +373,8 @@ class ServiceController extends Controller {
 
         }
         catch(Exception $e) {
-
-            echo json_encode(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
-
+            $f3->error(400, $e->getMessage());
             exit;
-
         } 
             
     }

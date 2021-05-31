@@ -206,20 +206,31 @@ class AppointmentServiceController extends Controller {
             );
 
             $services = new Service($this->db);
+            
+            $allServices = $services->getAll(0);
 
-            $result[0]['service'] = array();
+            for($i = 0; $i < count($allServices); $i++) {
+                $allServices[$i]['chosen'] = false;                             
+            }
 
             foreach($data as $value) {
-                $servicesData = $services->getById($value['serviceId']);
-                array_push($result[0]['service'], array(
-                    'id' => $servicesData[0]['id'],
-                    'name' => $servicesData[0]['name'],
-                    'price' => $servicesData[0]['price']
-                    )
-                );    
-            }                  
+                for($i = 0; $i < count($allServices); $i++) {
+                    if($allServices[$i]['id'] == $value['serviceId']) {
+                        $allServices[$i]['chosen'] = true;
+                    }
+                }
+                // $servicesData = $services->getById();
+                // array_push($result[0]['service'], array(
+                //     'id' => $servicesData[0]['id'],
+                //     'name' => $servicesData[0]['name'],
+                //     'price' => $servicesData[0]['price']
+                //     )
+                // );   
+            } 
+            
+            $result[0]['service'] = $allServices;
     
-            Response::successResponse($result);   
+            Response::successResponse($result);
 
             exit;
 
@@ -413,6 +424,39 @@ class AppointmentServiceController extends Controller {
             }
 
             Response::successResponse($records);
+
+            exit;
+
+        }
+        catch(Exception $e) {
+
+            echo json_encode(array(
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
+
+            exit;
+
+        }                       
+
+    }
+
+    function getAppointmentByDayByUserId($f3, $params) {
+
+        header('Content-type:application/json');
+
+        try {
+                
+            if(empty($params['userId']) || empty($params['year']) || empty($params['month']) || empty($params['day'])) {
+                $f3->error(400, 'Missing one or more required fields');
+                exit;
+            }
+
+            $appointmentService = new AppointmentService($this->db);
+
+            $result = $appointmentService->getAppointmentByDayByUserId($params['userId'], $params['year'], $params['month'], $params['day']);
+
+            Response::successResponse($result);
 
             exit;
 

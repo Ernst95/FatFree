@@ -81,7 +81,7 @@ class AuthController extends Controller {
                 ));
             }
             else {
-                Response::successMessage('');
+                Response::successResponse($token);
             }            
 
         }
