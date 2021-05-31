@@ -4,6 +4,12 @@ require_once('vendor/autoload.php');
  
 $f3 = Base::instance();
 
+/*header('Access-Control-Allow-Origin: *');
+
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+
+header("Access-Control-Allow-Headers: *");*/
+
 date_default_timezone_set("Africa/Johannesburg");
 
 $f3->config('app/config/routes/routes.ini');
@@ -30,7 +36,8 @@ $f3->set('ONERROR',
     function($f3) {
         echo json_encode(array(
             'success' => false,
-            'message' => $f3->get('ERROR.text')
+            'message' => $f3->get('ERROR.text'),
+            'code' => $f3->get('ERROR.code')
         ));
     }
 );
