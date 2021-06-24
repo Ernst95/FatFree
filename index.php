@@ -14,22 +14,18 @@ date_default_timezone_set("Africa/Johannesburg");
 
 $f3->config('app/config/routes/routes.ini');
 
-$f3->config('app/config/environment.ini');
+$f3->set('ENVIRONMENT', getenv('APPLICATION_ENV'));
+$f3->set('USER', getenv('DB_USER'));
+$f3->set('PASS', getenv('DB_PASS'));
+$f3->set('HOST', getenv('DB_HOST'));
+$f3->set('DBNAME', getenv('DB_NAME'));
 
-if($f3->get('env') == "dev") {
-
+if($f3->get('ENVIRONMENT') == "development") {
     $f3->config('app/config/dev/setup.ini');
-
-    $f3->config('app/config/dev/mysql.ini');
-
 }
 
-if($f3->get('env') == "prod"){
-
+if($f3->get('ENVIRONMENT') == "production"){
     $f3->config('app/config/prod/setup.ini');
-
-    $f3->config('app/config/prod/mysql.ini');
-
 }
 
 $f3->set('ONERROR', 

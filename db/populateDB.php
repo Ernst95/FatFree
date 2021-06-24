@@ -7,7 +7,7 @@
     // MySQL username
     $mysql_username = 'root';
     // MySQL password
-    $mysql_password = '';
+    $mysql_password = 'password';
     // Database name
     $mysql_database = 'salon';
 

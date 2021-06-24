@@ -1,0 +1,5 @@
+APPLICATION_ENV=development
+DB_HOST=mysql
+DB_USER="root"
+DB_PASS="password"
+DB_NAME="salon"

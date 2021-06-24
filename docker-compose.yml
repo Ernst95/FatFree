@@ -1,0 +1,48 @@
+version: "3.2"
+services:
+    php:
+        build:
+            context: './.docker/php/'
+        env_file:
+            - "./.docker/apache/env"
+        environment:
+            - COMPOSE_CONVERT_WINDOWS_PATHS=1
+        networks:
+            - backend
+        volumes:
+            - ./:/var/www/html/
+        container_name: php
+    apache:
+        build:
+            context: './.docker/apache/'
+        environment:
+            - COMPOSE_CONVERT_WINDOWS_PATHS=1
+        depends_on:
+            - php
+            - mysql
+        networks:
+            - frontend
+            - backend
+        ports:
+            - "8080:80"
+        volumes:
+            - ./:/var/www/html/
+        container_name: apache
+    mysql:
+        image: mysql:5.7
+        restart: always
+        ports:
+            - "3306:3306"
+        volumes:
+            - data:/var/lib/mysql
+        networks:
+            - backend
+        environment:
+            MYSQL_ROOT_PASSWORD: "password"
+            MYSQL_DATABASE: "salon"
+        container_name: mysql
+networks:
+    frontend:
+    backend:
+volumes:
+    data:

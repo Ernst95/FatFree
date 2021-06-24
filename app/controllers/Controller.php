@@ -15,35 +15,27 @@ class Controller {
     }
 
     function __construct() {
-
         try {
-
             $f3 = Base::instance();
             $this->f3 = $f3;
 
             $db = new DB\SQL(
-                $f3->get('mysql.db'),
-                $f3->get('mysql.username'),
-                $f3->get('mysql.password'),
+                "mysql:host={$f3->get('HOST')};port=3306;dbname={$f3->get('DBNAME')}",
+                $f3->get('USER'),
+                $f3->get('PASS'),
                 array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION)
             );
 
             $this->db = $db;
-
         }
         catch(Exception $e) {
-
             header('Content-type:application/json');
-
             echo json_encode(array(
                 'success' => false,
                 'message' => $e->getMessage()
             ));
-            
             exit;
-
         }
-        
     }
     
 }
