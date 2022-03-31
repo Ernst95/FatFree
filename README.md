@@ -23,3 +23,15 @@ Learning Fat-Free Framework
 #Populate tables
     1. First create a database called "salon"
     2. Execute the populateDB.php file in the cmd to populate the database with data
+
+#Debug settings for docker VSCode
+    {
+        {
+        "name": "Listen for XDebug on Docker",
+        "type": "php",
+        "request": "launch",
+        "port": 9003,
+        "pathMappings": {
+            "/var/www/html/": "${workspaceFolder}"
+        }
+    }
